@@ -1,0 +1,38 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Payment - Techno Bucket{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="text-center mb-4">
+                <h1 class="display-6 fw-bold mb-2">Complete Your Payment</h1>
+                <p class="text-secondary mb-0">
+                    Thanks for submitting your details. Please proceed with the payment to confirm your Combo Pack order.
+                </p>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-lg-5 text-center">
+                    {% if combo_service %}
+                        <p class="lead mb-3">{{ combo_service.name }}</p>
+                        <p class="h3 fw-bold mb-4">₹{{ combo_service.price|floatformat:0 }}</p>
+                    {% endif %}
+
+                    <p class="text-secondary small mb-4">(Payment gateway placeholder)</p>
+
+                    <div class="d-flex flex-column gap-3 align-items-center">
+                        <a class="btn btn-glow btn-lg w-100" style="max-width: 320px;" href="#">Pay Now</a>
+                        <a class="btn btn-outline-secondary w-100" style="max-width: 320px;" href="{% url 'services' %}">Back to Services</a>
+                    </div>
+
+                    <div class="mt-4 text-secondary small">
+                        Having trouble? <a href="{% url 'contact' %}" class="text-decoration-none">Contact us</a> and we’ll help you complete your order.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

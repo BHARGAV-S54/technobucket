@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Techno Bucket{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/hero-lightning.css">
+{% endblock %}
+
+{% block content %}
+<div class="home-page">
+
+    <!-- Hero Section -->
+    <section class="hero-section home-hero-section py-5 py-lg-7">
+        <div id="hero-lightning" class="hero-lightning" aria-hidden="true"></div>
+        <div class="container home-hero-container text-center py-5">
+            <div
+                class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill bg-secondary bg-opacity-25 border border-secondary mb-4">
+                <i class="bi bi-stars text-warning"></i>
+                <span class="small text-secondary">Starting from just &#8377;40</span>
+            </div>
+
+            <h1 class="display-3 fw-bold mb-4 home-hero-title">
+                Your Career,
+                <span class="gradient-text">
+                    Supercharged <i class="bi bi-lightning-fill" style="font-size: 0.85em; margin-left: 0.15em;"></i>
+                </span>
+            </h1>
+
+            <p class="lead text-secondary mb-4 mx-auto home-hero-subtitle" style="max-width: 600px;">
+                Professional resumes, portfolios, and profiles at prices that won't break the bank.
+                Start your journey to career success today.
+            </p>
+
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="{% url 'services' %}" class="btn btn-glow btn-lg px-4">
+                    View Services <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+                <a href="{% url 'contact' %}" class="btn btn-lg btn-outline-light px-4">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero to Offers Transition -->
+    <div class="section-transition">
+        <div class="transition-gradient"></div>
+        <div class="transition-particles" id="transition-particles">
+            <span class="transition-particle" style="left: 5%;"></span>
+            <span class="transition-particle"></span>
+            <span class="transition-particle"></span>
+            <span class="transition-particle"></span>
+            <span class="transition-particle"></span>
+            <span class="transition-particle"></span>
+            <span class="transition-particle"></span>
+            <span class="transition-particle"></span>
+            <span class="transition-particle"></span>
+            <span class="transition-particle"></span>
+        </div>
+        <div class="transition-line"></div>
+    </div>
+
+    <!-- Features + Services (Single Screen) -->
+    <section class="home-offers-section py-5" style="position: relative; overflow: hidden;">
+        <div id="aurora-container" class="soft-aurora-container" aria-hidden="true"></div>
+        <div class="container home-offers-container">
+            <div class="row g-3 home-feature-grid">
+                <div class="col-4">
+                    <div class="card bg-secondary bg-opacity-10 border-secondary h-100 js-electric-border home-offer-card home-offer-card--feature">
+                        <div class="card-body p-4">
+                            <div class="bg-info bg-opacity-25 rounded p-3 d-inline-block mb-3">
+                                <i class="bi bi-file-earmark-check text-info fs-4 bounce-icon"></i>
+                            </div>
+                            <h5 class="card-title">ATS-Optimized</h5>
+                            <p class="card-text text-secondary small">Our resumes pass through Applicant Tracking
+                                Systems with 95% success rate.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card bg-secondary bg-opacity-10 border-secondary h-100 js-electric-border home-offer-card home-offer-card--feature">
+                        <div class="card-body p-4">
+                            <div class="bg-info bg-opacity-25 rounded p-3 d-inline-block mb-3">
+                                <i class="bi bi-hand-thumbs-up text-info fs-4 bounce-icon"></i>
+                            </div>
+                            <h5 class="card-title">500+ Happy Clients</h5>
+                            <p class="card-text text-secondary small">We have helped hundreds of professionals land
+                                their dream jobs.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card bg-secondary bg-opacity-10 border-secondary h-100 js-electric-border home-offer-card home-offer-card--feature">
+                        <div class="card-body p-4">
+                            <div class="bg-info bg-opacity-25 rounded p-3 d-inline-block mb-3">
+                                <i class="bi bi-rocket-takeoff text-info fs-4 rocket-takeoff-icon"></i>
+                            </div>
+                            <h5 class="card-title">Quick Turnaround</h5>
+                            <p class="card-text text-secondary small">Get your portfolio ready within 48 hours of order
+                                placement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center my-3 my-md-4">
+                <h2 class="home-offers-title mb-1">Our Services</h2>
+                <p class="text-secondary home-offers-subtitle mb-0">Choose what fits your needs best</p>
+            </div>
+
+            <div class="row g-3 home-service-grid">
+                {% for service in services %}
+                <div class="col-6 col-lg-3">
+                    <a href="{% url 'services' %}"
+                        class="card bg-secondary bg-opacity-10 border-secondary h-100 text-decoration-none text-light js-electric-border home-offer-card home-offer-card--service">
+                        <div class="card-body p-4">
+                            {% if service.is_popular %}
+                            <span class="badge"
+                                style="background: linear-gradient(135deg, #06b6d4, #2563eb);">Popular</span>
+                            {% endif %}
+                            <h5 class="mt-3">{{ service.name }}</h5>
+                            <p class="h4 mb-2" style="color: #22d3ee;">&#8377;{{ service.price|floatformat:0 }}</p>
+                            <p class="text-secondary small mb-0">{{ service.description }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-5 pixel-snow-bg">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="h1 mb-3">What Our Clients Say</h2>
+                <p class="text-secondary">Success stories from professionals like you</p>
+            </div>
+
+            <div class="row g-4">
+                {% for testimonial in testimonials %}
+                <div class="col-md-4">
+                    <div class="card bg-secondary bg-opacity-10 border-secondary h-100 js-electric-border">
+                        <div class="card-body p-4">
+                            <p class="fst-italic text-secondary mb-4">"{{ testimonial.content }}"</p>
+                            <div>
+                                <p class="fw-semibold mb-1">{{ testimonial.customer_name }}</p>
+                                <p class="text-secondary small">{{ testimonial.role }}{% if testimonial.company %} at {{
+                                    testimonial.company }}{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 pixel-snow-bg">
+        <div class="container">
+            <div class="card text-center p-5 js-electric-border"
+                style="background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(59,130,246,0.1), rgba(168,85,247,0.1)); border-color: #374151;">
+                <h2 class="h1 mb-3">Ready to Transform Your Career?</h2>
+                <p class="text-secondary mb-4 mx-auto" style="max-width: 500px;">
+                    Join hundreds of professionals who have already elevated their careers with Techno Bucket.
+                </p>
+                <a href="{% url 'services' %}" class="btn btn-glow btn-lg px-4 mx-auto">
+                    Get Started Today <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="module" src="/static/js/soft-aurora.js"></script>
+<script type="module" src="/static/js/lightning.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const animateElements = document.querySelectorAll('.home-offer-card, .home-offers-title, .home-offers-subtitle');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    animateElements.forEach(el => observer.observe(el));
+});
+</script>
+{% endblock %}

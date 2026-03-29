@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Combo Pack - Get Started{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9">
+            <div class="mb-4 text-center">
+                <h1 class="display-6 fw-bold mb-2">Combo Pack Form</h1>
+                <p class="text-secondary mb-0">
+                    One form for everything: resume, portfolio, and profile creation. Tell us the basics and your goals—we’ll handle the rest.
+                </p>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-lg-5">
+                    <form method="post" action="{% url 'combo_pack_form' %}">
+                        {% csrf_token %}
+
+                        <!-- Personal Information -->
+                        <h2 class="h4 mb-3">Personal Information</h2>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" name="full_name" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" name="phone" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">LinkedIn Profile</label>
+                                <input type="url" name="linkedin_profile" class="form-control" placeholder="https://www.linkedin.com/in/username">
+                            </div>
+                        </div>
+
+                        <!-- Career Goals -->
+                        <h2 class="h4 mb-3">Career Goals</h2>
+                        <div class="mb-4">
+                            <label class="form-label">Target Role / Industry</label>
+                            <input type="text" name="target_role" class="form-control" placeholder="e.g., Frontend Developer in SaaS">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">What’s your top outcome?</label>
+                            <textarea name="top_outcome" rows="2" class="form-control" placeholder="Land interviews, change domains, freelance clients, etc."></textarea>
+                        </div>
+
+                        <!-- Resume + Experience -->
+                        <h2 class="h4 mb-3">Resume Inputs</h2>
+                        <div class="mb-3">
+                            <label class="form-label">Current Experience Summary</label>
+                            <textarea name="experience_summary" rows="3" class="form-control" placeholder="Years of experience, domains, and standout achievements."></textarea>
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Key Skills</label>
+                                <textarea name="key_skills" rows="2" class="form-control" placeholder="e.g., React, Django, SQL, Azure"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Tools / Tech Stack</label>
+                                <textarea name="tools_stack" rows="2" class="form-control" placeholder="e.g., Figma, AWS, Git, Notion"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Portfolio Inputs -->
+                        <h2 class="h4 mb-3">Portfolio Inputs</h2>
+                        <div class="mb-3">
+                            <label class="form-label">Projects to Showcase (links allowed)</label>
+                            <textarea name="projects" rows="3" class="form-control" placeholder="List 2–5 projects, with links if available."></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Design/Branding Preferences</label>
+                            <textarea name="design_preferences" rows="2" class="form-control" placeholder="Colors, vibe, examples you like."></textarea>
+                        </div>
+
+                        <!-- Profile Creation -->
+                        <h2 class="h4 mb-3">Profile Creation</h2>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Current Job Title</label>
+                                <input type="text" name="current_title" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Current Company</label>
+                                <input type="text" name="current_company" class="form-control">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Anything else we should know?</label>
+                            <textarea name="additional_notes" rows="3" class="form-control" placeholder="Timeline, constraints, inspiration links, etc."></textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'services' %}" class="btn btn-outline-secondary">Back to Services</a>
+                            <button type="submit" class="btn btn-glow btn-lg">Submit Combo Request</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

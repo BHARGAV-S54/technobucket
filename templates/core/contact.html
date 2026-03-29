@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - Techno Bucket{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="h1 mb-3">Get in Touch</h1>
+            <p class="text-secondary">Have questions? We'd love to hear from you.</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card bg-secondary bg-opacity-10 border-secondary">
+                    <div class="card-body p-4 p-lg-5">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Your Name</label>
+                                    <input type="text" name="name" class="form-control bg-dark text-light border-secondary" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" name="email" class="form-control bg-dark text-light border-secondary" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Interested Service (Optional)</label>
+                                    <select name="service" class="form-select bg-dark text-light border-secondary">
+                                        <option value="" {% if not selected_service_id %}selected{% endif %}>Select a service...</option>
+                                        {% for service in services_list %}
+                                        <option value="{{ service.id }}" {% if selected_service_id|stringformat:'s' == service.id|stringformat:'s' %}selected{% endif %}>
+                                            {{ service.name }} - ₹{{ service.price|floatformat:0 }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Your Message</label>
+                                    <textarea name="message" rows="5" class="form-control bg-dark text-light border-secondary" required>{{ prefill_message }}</textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #06b6d4, #2563eb); border: none;">
+                                        <i class="bi bi-send me-2"></i> Send Message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

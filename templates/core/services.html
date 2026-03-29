@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %}Services - Techno Bucket{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/giftbox.css">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold mb-3">Our Services</h1>
+        <p class="text-secondary mx-auto" style="max-width: 500px;">
+            Choose from our range of professional services designed to help you stand out in the competitive job market.
+        </p>
+    </div>
+
+    <!-- Combo Pack Section -->
+    {% if combo_pack %}
+    <div class="combo-pack-section">
+        <!-- Gift Box -->
+        <div id="giftWrapper" class="gift-animation-wrapper">
+            <div id="giftBox" class="gift-box">
+                <span class="gift-emoji">🎁</span>
+                <div class="gift-hint">Click to Open Your Special Offer!</div>
+                <div id="confettiContainer" class="confetti-container"></div>
+            </div>
+        </div>
+
+        <!-- Ballpit Background (centered behind card) -->
+        <div id="ballPitBg" class="ballpit-background">
+            <canvas id="ballpit-canvas"></canvas>
+        </div>
+
+        <!-- Combo Pack Card (hidden until opened) -->
+        <div id="comboPackCard" class="combo-pack-card-wrapper">
+            <div class="card combo-pack-card mb-5 position-relative overflow-hidden shadow-lg border-warning">
+                <div class="position-absolute top-0 end-0 p-4">
+                    <i class="bi bi-stars text-warning fs-1"></i>
+                </div>
+
+                <div class="position-absolute top-0 start-50 translate-middle-x">
+                    <span class="badge rounded-bottom px-4 py-2">BEST VALUE OFFER</span>
+                </div>
+
+                <div class="card-body p-4 p-lg-5 mt-4">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <div class="d-flex align-items-start gap-4">
+                                <div class="p-3 rounded combo-pack-icon">
+                                    <i class="bi bi-gift text-warning fs-1"></i>
+                                </div>
+                                <div>
+                                    <h2 class="h1 mb-2">{{ combo_pack.name }}</h2>
+                                    <p class="text-secondary mb-0">{{ combo_pack.description }}</p>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-4">
+                                {% for feature in combo_pack.features %}
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="d-flex align-items-start gap-2">
+                                        <i class="bi bi-check-lg text-success mt-1"></i>
+                                        <span class="small">{{ feature }}</span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                            <div class="d-flex align-items-center justify-content-lg-end gap-3 mb-3">
+                                <span class="display-4 fw-bold">₹{{ combo_pack.price|floatformat:0 }}</span>
+                                <div class="text-start">
+                                    <span class="text-warning small text-nowrap">Save ₹{{ combo_pack.savings }}</span>
+                                </div>
+                            </div>
+                            <a href="{% url 'combo_pack_form' %}" class="btn btn-lg btn-glow w-100"
+                                style="background: linear-gradient(135deg, #f59e0b, #ea580c); border: none;">
+                                Get Combo Pack
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Individual Services -->
+    <h2 class="h3 mb-4 text-secondary">Individual Services</h2>
+    <div class="row g-4">
+        {% for service in services %}
+        <div class="col-md-6">
+            <div
+                class="card service-card h-100 position-relative {% if service.is_popular %}service-card--popular{% endif %}">
+                {% if service.is_popular %}
+                <div class="position-absolute badge-popular">
+                    <span class="badge rounded-pill">Most Popular</span>
+                </div>
+                {% endif %}
+
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div
+                            class="p-3 rounded service-icon {% if service.is_popular %}service-icon--popular{% endif %}">
+                            {% if service.slug == 'ats-resume' %}
+                            <i class="bi bi-file-text fs-4"></i>
+                            {% elif service.slug == 'portfolio-website' %}
+                            <i class="bi bi-globe fs-4"></i>
+                            {% elif service.slug == 'custom-project' %}
+                            <i class="bi bi-code-square fs-4"></i>
+                            {% else %}
+                            <i class="bi bi-person-circle fs-4"></i>
+                            {% endif %}
+                        </div>
+                        <span class="h3 fw-bold price-tag">₹{{ service.price|floatformat:0 }}</span>
+                    </div>
+
+                    <h3 class="h4 mb-2">{{ service.name }}</h3>
+                    <p class="text-secondary mb-4">{{ service.description }}</p>
+
+                    <ul class="list-unstyled mb-4 service-features">
+                        {% for feature in service.features %}
+                        <li class="d-flex align-items-start gap-2 mb-2">
+                            <i class="bi bi-check-lg text-success mt-1"></i>
+                            <small>{{ feature }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="d-grid gap-2">
+                        {% if service.slug == 'portfolio-website' %}
+                        <a href="{% url 'portfolio_order' %}" class="btn btn-glow btn-lg">Get Started</a>
+                        <a href="https://demo-portfolio-technobucket.vercel.app" target="_blank"
+                            class="btn btn-outline-secondary"> <i class="bi bi-box-arrow-up-right me-1"></i> View
+                            Demo</a>
+                        {% elif service.slug == 'ats-resume' %}
+                        <a href="{% url 'ats_resume_form' %}" class="btn btn-glow btn-lg">Get Started</a>
+                        {% elif service.slug == 'custom-project' %}
+                        <a href="{% url 'custom_project' %}" class="btn btn-glow btn-lg">Get Started</a>
+                        {% else %}
+                        <a href="{% url 'contact' %}" class="btn btn-glow btn-lg">Get Started</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/giftbox.js"></script>
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js",
+            "three/examples/jsm/environments/RoomEnvironment.js": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js"
+        }
+    }
+</script>
+<script type="module" src="/static/js/ballpit.js"></script>
+{% endblock %}

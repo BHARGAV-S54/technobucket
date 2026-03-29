@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+
+{% block title %}Portfolio Website - Get Started{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9">
+            <div class="mb-4 text-center">
+                <h1 class="display-6 fw-bold mb-2">Portfolio Creation Form</h1>
+                <p class="text-secondary mb-0">
+                    Share your details and content below. We will use this information to design and build your personalised portfolio website.
+                </p>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-lg-5">
+                    <form method="post" enctype="multipart/form-data" action="{% url 'portfolio_order' %}">
+                        {% csrf_token %}
+
+                        <!-- Personal Information -->
+                        <h2 class="h4 mb-3">Personal Information</h2>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" name="phone" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">LinkedIn Profile</label>
+                                <input type="url" name="linkedin_profile" class="form-control" placeholder="https://www.linkedin.com/in/username" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">GitHub / Code Repository</label>
+                                <input type="url" name="github_profile" class="form-control" placeholder="https://github.com/username" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Personal Website / Blog (if any)</label>
+                                <input type="url" name="personal_website" class="form-control" placeholder="https://example.com">
+                            </div>
+                        </div>
+
+                        <!-- Professional Summary -->
+                        <h2 class="h4 mb-3">Professional Summary</h2>
+                        <div class="mb-4">
+                            <label class="form-label">Short introduction (2–3 sentences about yourself)</label>
+                            <textarea name="professional_summary" rows="3" class="form-control" placeholder="Example: I am a software developer with a passion for building clean and user-friendly web applications..."></textarea>
+                        </div>
+
+                        <!-- Work Experience -->
+                        <h2 class="h4 mb-3">Work Experience</h2>
+                        <p class="text-secondary small">Add one or more roles. You can leave this blank if you have no work experience yet.</p>
+                        <div id="experience-list" class="mb-3">
+                            <div class="experience-item border rounded p-3 mb-3">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Job Title</label>
+                                        <input type="text" name="experience[0][job_title]" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Company / Organization</label>
+                                        <input type="text" name="experience[0][company]" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" name="experience[0][location]" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Duration (MM/YYYY – MM/YYYY)</label>
+                                        <input type="text" name="experience[0][duration]" class="form-control">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Key Responsibilities &amp; Achievements</label>
+                                        <textarea name="experience[0][details]" rows="2" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-4" onclick="addExperience()">+ Add Another Role</button>
+
+                        <!-- Education -->
+                        <h2 class="h4 mb-3">Education</h2>
+                        <div id="education-list" class="mb-3">
+                            <div class="education-item border rounded p-3 mb-3">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Degree / Certification</label>
+                                        <input type="text" name="education[0][degree]" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Institution</label>
+                                        <input type="text" name="education[0][institution]" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" name="education[0][location]" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Graduation Date</label>
+                                        <input type="text" name="education[0][graduation_date]" class="form-control">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Highlights (projects, honors, etc.)</label>
+                                        <textarea name="education[0][highlights]" rows="2" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-4" onclick="addEducation()">+ Add Another Degree</button>
+
+                        <!-- Skills -->
+                        <h2 class="h4 mb-3">Skills</h2>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Technical Skills</label>
+                                <textarea name="skills" rows="2" class="form-control" placeholder="Example: JavaScript, React, Django, SQL (separate by commas)"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Soft Skills</label>
+                                <textarea name="soft_skills" rows="2" class="form-control" placeholder="Example: Communication, Teamwork, Problem-solving"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Projects -->
+                        <h2 class="h4 mb-3">Projects</h2>
+                        <p class="text-secondary small">We will showcase your best work here.</p>
+                        <div id="projects-list" class="mb-3">
+                            <div class="project-item border rounded p-3 mb-3">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Project Title</label>
+                                        <input type="text" name="projects[0][title]" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Link / Demo (if available)</label>
+                                        <input type="url" name="project_link_0" class="form-control" placeholder="https://">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Description</label>
+                                        <textarea name="projects[0][description]" rows="2" class="form-control"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Tools / Technologies Used</label>
+                                        <input type="text" name="projects[0][tools]" class="form-control" placeholder="Example: React, Node.js, PostgreSQL">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-4" onclick="addProject()">+ Add Another Project</button>
+
+                        <!-- Certifications & Awards -->
+                        <h2 class="h4 mb-3">Certifications &amp; Awards</h2>
+                        <div id="certifications-list" class="mb-3">
+                            <div class="cert-item border rounded p-3 mb-3">
+                                <div class="row g-3">
+                                    <div class="col-md-5">
+                                        <label class="form-label">Certification / Award Name</label>
+                                        <input type="text" name="certifications[0][name]" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Issuing Organization</label>
+                                        <input type="text" name="certifications[0][organization]" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Date Earned</label>
+                                        <input type="text" name="certifications[0][date]" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-4" onclick="addCertification()">+ Add Another Certification</button>
+
+                        <!-- Optional Sections -->
+                        <h2 class="h4 mb-3">Additional Sections (Optional)</h2>
+                        <div class="mb-4">
+                            <label class="form-label">Volunteer Experience</label>
+                            <textarea name="volunteer_experience" rows="2" class="form-control"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Languages</label>
+                            <textarea name="languages" rows="2" class="form-control" placeholder="Example: English (Fluent), Hindi (Native)"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Interests / Hobbies</label>
+                            <textarea name="interests" rows="2" class="form-control"></textarea>
+                        </div>
+
+                        <!-- Files -->
+                        <h2 class="h4 mb-3">Uploads (Optional)</h2>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Resume (PDF)</label>
+                                <input type="file" name="resume" class="form-control" accept=".pdf">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Profile Image</label>
+                                <input type="file" name="profile_image" class="form-control" accept="image/*">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Certificates (you can upload multiple)</label>
+                                <input type="file" name="certificate_0" class="form-control" multiple>
+                            </div>
+                        </div>
+
+                        <!-- Extra Information (maps to model) -->
+                        <div class="mb-4">
+                            <label class="form-label">Anything else we should know? (Extra Information)</label>
+                            <textarea name="extra_information" rows="3" class="form-control" placeholder="Share design preferences, color themes, or any specific sections you want on your portfolio."></textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'services' %}" class="btn btn-outline-secondary">Back to Services</a>
+                            <button type="submit" class="btn btn-glow btn-lg">Submit Portfolio Request</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let experienceIndex = 1;
+    let educationIndex = 1;
+    let projectIndex = 1;
+    let certificationIndex = 1;
+
+    function addExperience() {
+        const container = document.getElementById('experience-list');
+        const idx = experienceIndex++;
+        const div = document.createElement('div');
+        div.className = 'experience-item border rounded p-3 mb-3';
+        div.innerHTML = `
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Job Title</label>
+                    <input type="text" name="experience[${idx}][job_title]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Company / Organization</label>
+                    <input type="text" name="experience[${idx}][company]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Location</label>
+                    <input type="text" name="experience[${idx}][location]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Duration (MM/YYYY – MM/YYYY)</label>
+                    <input type="text" name="experience[${idx}][duration]" class="form-control">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Key Responsibilities &amp; Achievements</label>
+                    <textarea name="experience[${idx}][details]" rows="2" class="form-control"></textarea>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+
+    function addEducation() {
+        const container = document.getElementById('education-list');
+        const idx = educationIndex++;
+        const div = document.createElement('div');
+        div.className = 'education-item border rounded p-3 mb-3';
+        div.innerHTML = `
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Degree / Certification</label>
+                    <input type="text" name="education[${idx}][degree]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Institution</label>
+                    <input type="text" name="education[${idx}][institution]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Location</label>
+                    <input type="text" name="education[${idx}][location]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Graduation Date</label>
+                    <input type="text" name="education[${idx}][graduation_date]" class="form-control">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Highlights (projects, honors, etc.)</label>
+                    <textarea name="education[${idx}][highlights]" rows="2" class="form-control"></textarea>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+
+    function addProject() {
+        const container = document.getElementById('projects-list');
+        const idx = projectIndex++;
+        const div = document.createElement('div');
+        div.className = 'project-item border rounded p-3 mb-3';
+        div.innerHTML = `
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Project Title</label>
+                    <input type="text" name="projects[${idx}][title]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Link / Demo (if available)</label>
+                    <input type="url" name="project_link_${idx}" class="form-control" placeholder="https://">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea name="projects[${idx}][description]" rows="2" class="form-control"></textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Tools / Technologies Used</label>
+                    <input type="text" name="projects[${idx}][tools]" class="form-control" placeholder="Example: React, Node.js, PostgreSQL">
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+
+    function addCertification() {
+        const container = document.getElementById('certifications-list');
+        const idx = certificationIndex++;
+        const div = document.createElement('div');
+        div.className = 'cert-item border rounded p-3 mb-3';
+        div.innerHTML = `
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label class="form-label">Certification / Award Name</label>
+                    <input type="text" name="certifications[${idx}][name]" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Issuing Organization</label>
+                    <input type="text" name="certifications[${idx}][organization]" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Date Earned</label>
+                    <input type="text" name="certifications[${idx}][date]" class="form-control">
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+</script>
+
+{% endblock %}
