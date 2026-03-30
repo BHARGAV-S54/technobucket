@@ -3,7 +3,7 @@
 {% block title %}Services - Techno Bucket{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/giftbox.css">
+<link rel="stylesheet" href="{% static 'css/giftbox.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -152,7 +152,7 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/giftbox.js"></script>
+<script src="{% static 'js/giftbox.js' %}"></script>
 <script type="importmap">
     {
         "imports": {
@@ -161,5 +161,5 @@
         }
     }
 </script>
-<script type="module" src="/static/js/ballpit.js"></script>
+<script type="module" src="{% static 'js/ballpit.js' %}"></script>
 {% endblock %}

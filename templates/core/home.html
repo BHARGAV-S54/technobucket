@@ -3,7 +3,7 @@
 {% block title %}Home - Techno Bucket{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/hero-lightning.css">
+<link rel="stylesheet" href="{% static 'css/hero-lightning.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -175,8 +175,8 @@
 {% endblock %}
 
 {% block extra_js %}
-<script type="module" src="/static/js/soft-aurora.js"></script>
-<script type="module" src="/static/js/lightning.js"></script>
+<script type="module" src="{% static 'js/soft-aurora.js' %}"></script>
+<script type="module" src="{% static 'js/lightning.js' %}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const animateElements = document.querySelectorAll('.home-offer-card, .home-offers-title, .home-offers-subtitle');
