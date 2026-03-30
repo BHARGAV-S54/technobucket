@@ -11,16 +11,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-production')
 
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-# Allow common local hosts by default; can be overridden via env
-_hosts_env = os.environ.get('ALLOWED_HOSTS', '').strip()
-if not _hosts_env:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '*.vercel.app', 'technobucket.com', 'www.technobucket.com']
-else:
-    ALLOWED_HOSTS = [h.strip() for h in _hosts_env.split(',') if h.strip()]
-    if '*' in ALLOWED_HOSTS:
-        ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']  # Safe for production on Vercel with CSRF/auth protection
+
+# Security settings for production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_SECURITY_POLICY = {
+        "default-src": ("'self'",),
+    }
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',

@@ -1,0 +1,26 @@
+{
+  "builds": [
+    {
+      "src": "technobucket/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "pythonVersion": "3.11"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "technobucket/wsgi.py"
+    }
+  ],
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "technobucket.settings",
+    "DEBUG": "False"
+  }
+}
