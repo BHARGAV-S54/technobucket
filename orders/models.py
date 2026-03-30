@@ -36,7 +36,7 @@ class PortfolioOrder(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     
     # Payment
-    amount_paid = models.DecimalField(max_digits=10, decimal_places=2, default=299.00)
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2, default=1999.00)
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='pending')
     
     # Timestamps

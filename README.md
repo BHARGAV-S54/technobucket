@@ -12,10 +12,10 @@ A modern, production-ready portfolio services website built with TanStack Start,
 
 ## Services Offered
 
-1. **ATS-Friendly Resume** - ₹40
-2. **Portfolio Website** - ₹299
-3. **Custom Project** - ₹999
-4. **Professional Profile Creation** - ₹149
+1. **ATS-Friendly Resume** - ₹99
+2. **Portfolio Website** - ₹1999
+3. **Custom Project** - ₹4999
+4. **Professional Profile Creation** - ₹999
 5. **Complete Career Combo Pack** - ₹1,300 (Save ₹368)
 
 ## Tech Stack

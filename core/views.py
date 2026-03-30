@@ -31,25 +31,25 @@ def home(request):
         services = [
             {
                 'name': 'ATS Resume',
-                'price': 40,
+                'price': 99,
                 'description': 'Beat the bots with a resume designed for Applicant Tracking Systems.',
                 'is_popular': False,
             },
             {
                 'name': 'Portfolio',
-                'price': 299,
+                'price': 1999,
                 'description': 'Showcase your work with a modern, professional portfolio.',
                 'is_popular': True,
             },
             {
                 'name': 'Custom Project',
-                'price': 999,
+                'price': 4999,
                 'description': 'Full development support to build a complete custom project.',
                 'is_popular': False,
             },
             {
                 'name': 'Profile Creation',
-                'price': 149,
+                'price': 999,
                 'description': 'Optimize your LinkedIn and professional profiles for recruiters.',
                 'is_popular': False,
             },
@@ -98,10 +98,10 @@ def services(request):
             'original_price': 1487,
             'savings': 368,
             'features': [
-                'ATS-Friendly Resume (₹40)',
-                'Portfolio Website (₹299)',
-                'Professional Profile Creation (₹149)',
-                'FREE Custom Project Consultation (₹999 value)',
+                'ATS-Friendly Resume (₹99)',
+                'Portfolio Website (₹1999)',
+                'Professional Profile Creation (₹999)',
+                'FREE Custom Project Consultation (₹4999 value)',
                 'Priority Support',
                 'Save ₹368 (25% off)',
             ],
@@ -112,7 +112,7 @@ def services(request):
             {
                 'name': 'ATS-Friendly Resume',
                 'slug': 'ats-resume',
-                'price': 40,
+                'price': 99,
                 'description': 'Get past the bots and land interviews with our professionally crafted, ATS-optimized resumes that highlight your skills.',
                 'features': [
                     'ATS-Optimized Format',
@@ -125,7 +125,7 @@ def services(request):
             {
                 'name': 'Portfolio Website',
                 'slug': 'portfolio-website',
-                'price': 299,
+                'price': 1999,
                 'description': 'Showcase your work with a stunning, responsive portfolio website that impresses recruiters and clients alike.',
                 'features': [
                     'Responsive Design',
@@ -138,7 +138,7 @@ def services(request):
             {
                 'name': 'Custom Project',
                 'slug': 'custom-project',
-                'price': 999,
+                'price': 4999,
                 'description': 'Need something unique? We build custom web applications, tools, and solutions tailored to your exact requirements.',
                 'features': [
                     'Full-Stack Development',
@@ -151,7 +151,7 @@ def services(request):
             {
                 'name': 'Professional Profile Creation',
                 'slug': 'profile-creation',
-                'price': 149,
+                'price': 999,
                 'description': 'Stand out on LinkedIn and other professional platforms with an optimized profile that attracts opportunities.',
                 'features': [
                     'LinkedIn Optimization',
