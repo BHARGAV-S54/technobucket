@@ -16,7 +16,7 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 # Allow common local hosts by default; can be overridden via env
 _hosts_env = os.environ.get('ALLOWED_HOSTS', '').strip()
 if not _hosts_env:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0']
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '*.vercel.app', 'technobucket.com', 'www.technobucket.com']
 else:
     ALLOWED_HOSTS = [h.strip() for h in _hosts_env.split(',') if h.strip()]
     if '*' in ALLOWED_HOSTS:
