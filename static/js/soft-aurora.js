@@ -318,6 +318,14 @@ function mountAurora() {
   initAurora(container);
 }
 
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mountAurora);
+  } else {
+    mountAurora();
+  }
+}
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', mountAurora);
 } else {
