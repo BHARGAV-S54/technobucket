@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Service, Testimonial, ContactInquiry
 from django.utils.html import format_html
+from django.http import HttpResponse
+from .pdf_generator import generate_inquiry_pdf, generate_portfolio_order_pdf
 
 
 def home(request):
@@ -264,6 +266,7 @@ def ats_resume_form(request):
             name=full_name or 'Unknown',
             email=email or '',
             message=message_text,
+            submission_type='ats_resume',
             ip_address=get_client_ip(request)
         )
 
@@ -301,6 +304,7 @@ def combo_pack_form(request):
             name=full_name or 'Unknown',
             email=email or '',
             message=message_text,
+            submission_type='combo_pack',
             ip_address=get_client_ip(request)
         )
 
@@ -359,16 +363,31 @@ def admin_dashboard(request):
     """Admin dashboard view"""
     from orders.models import PortfolioOrder
     
-    orders = PortfolioOrder.objects.all().order_by('-created_at')
-    inquiries = ContactInquiry.objects.all().order_by('-created_at')
+    # Get portfolio orders
+    portfolio_orders = PortfolioOrder.objects.all().order_by('-created_at')
+    
+    # Get service form submissions (from ContactInquiry)
+    service_submissions = ContactInquiry.objects.filter(
+        submission_type__in=['ats_resume', 'combo_pack']
+    ).order_by('-created_at')
+    
+    # Get actual contact inquiries (messages) - exclude service form submissions
+    inquiries = ContactInquiry.objects.filter(
+        submission_type='inquiry'
+    ).order_by('-created_at')
+    
+    # Combine portfolio orders with service submissions for the orders section
+    all_orders = list(portfolio_orders) + list(service_submissions)
+    all_orders.sort(key=lambda x: x.created_at, reverse=True)
     
     context = {
-        'orders': orders,
+        'orders': portfolio_orders,
+        'service_submissions': service_submissions,
         'inquiries': inquiries,
         'new_inquiries': inquiries.filter(status='new').count(),
-        'total_orders': orders.count(),
-        'pending_orders': orders.filter(status='pending').count(),
-        'completed_orders': orders.filter(status='completed').count(),
+        'total_orders': portfolio_orders.count() + service_submissions.count(),
+        'pending_orders': portfolio_orders.filter(status='pending').count(),
+        'completed_orders': portfolio_orders.filter(status='completed').count(),
     }
     return render(request, 'core/admin_dashboard.html', context)
 
@@ -387,3 +406,26 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+
+@login_required
+def download_inquiry_pdf(request, inquiry_id):
+    """Download PDF for a contact inquiry"""
+    inquiry = get_object_or_404(ContactInquiry, id=inquiry_id)
+    pdf_buffer = generate_inquiry_pdf(inquiry)
+
+    response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="inquiry_{inquiry.id}_{inquiry.name.replace(" ", "_")}.pdf"'
+    return response
+
+
+@login_required
+def download_order_pdf(request, order_id):
+    """Download PDF for a portfolio order"""
+    from orders.models import PortfolioOrder
+    order = get_object_or_404(PortfolioOrder, id=order_id)
+    pdf_buffer = generate_portfolio_order_pdf(order)
+
+    response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="order_{order.id:05d}_{order.full_name.replace(" ", "_")}.pdf"'
+    return response

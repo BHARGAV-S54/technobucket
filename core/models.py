@@ -55,12 +55,20 @@ class ContactInquiry(models.Model):
         ('spam', 'Spam'),
     ]
 
+    SUBMISSION_TYPE_CHOICES = [
+        ('inquiry', 'Contact Inquiry'),
+        ('ats_resume', 'ATS Resume Form'),
+        ('combo_pack', 'Combo Pack Form'),
+        ('custom_project', 'Custom Project Form'),
+    ]
+
     name = models.CharField(max_length=255)
     email = models.EmailField()
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True, blank=True)
     service_name = models.CharField(max_length=255, blank=True)
     message = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
+    submission_type = models.CharField(max_length=20, choices=SUBMISSION_TYPE_CHOICES, default='inquiry')
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -51,7 +51,7 @@
                         </div>
 
                         <!-- Work Experience -->
-                        <h2 class="h4 mb-3">Work Experience</h2>
+                        <h2 class="h4 mb-3">Work Experience <span class="text-secondary">(optional)</span></h2>
                         <p class="text-secondary small">Add one or more roles. Leave blank if you have no work experience yet.</p>
                         <div id="experience-list" class="mb-3">
                             <div class="experience-item border rounded p-3 mb-3">
@@ -69,12 +69,12 @@
                                         <input type="text" name="experience[0][location]" class="form-control">
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">Start Date (MM/YYYY)</label>
-                                        <input type="text" name="experience[0][start_date]" class="form-control">
+                                        <label class="form-label">Start Date</label>
+                                        <input type="date" name="experience[0][start_date]" class="form-control">
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">End Date (MM/YYYY or “Present”)</label>
-                                        <input type="text" name="experience[0][end_date]" class="form-control">
+                                        <label class="form-label">End Date (or leave blank if current)</label>
+                                        <input type="date" name="experience[0][end_date]" class="form-control">
                                     </div>
                                     <div class="col-12">
                                         <label class="form-label">Key Responsibilities &amp; Achievements (bullet points)</label>
@@ -104,8 +104,8 @@
                                         <input type="text" name="education[0][location]" class="form-control">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Graduation Date (MM/YYYY)</label>
-                                        <input type="text" name="education[0][graduation_date]" class="form-control">
+                                        <label class="form-label">Graduation Date</label>
+                                        <input type="date" name="education[0][graduation_date]" class="form-control">
                                     </div>
                                     <div class="col-12">
                                         <label class="form-label">Relevant Coursework/Projects</label>
@@ -144,7 +144,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Date Earned</label>
-                                        <input type="text" name="certifications[0][date]" class="form-control">
+                                        <input type="date" name="certifications[0][date]" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -225,12 +225,12 @@
                     <input type="text" name="experience[${idx}][location]" class="form-control">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Start Date (MM/YYYY)</label>
-                    <input type="text" name="experience[${idx}][start_date]" class="form-control">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="experience[${idx}][start_date]" class="form-control">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">End Date (MM/YYYY or “Present”)</label>
-                    <input type="text" name="experience[${idx}][end_date]" class="form-control">
+                    <label class="form-label">End Date (or leave blank if current)</label>
+                    <input type="date" name="experience[${idx}][end_date]" class="form-control">
                 </div>
                 <div class="col-12">
                     <label class="form-label">Key Responsibilities &amp; Achievements (bullet points)</label>
@@ -261,8 +261,8 @@
                     <input type="text" name="education[${idx}][location]" class="form-control">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Graduation Date (MM/YYYY)</label>
-                    <input type="text" name="education[${idx}][graduation_date]" class="form-control">
+                    <label class="form-label">Graduation Date</label>
+                    <input type="date" name="education[${idx}][graduation_date]" class="form-control">
                 </div>
                 <div class="col-12">
                     <label class="form-label">Relevant Coursework/Projects</label>
@@ -314,7 +314,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Date Earned</label>
-                    <input type="text" name="certifications[${idx}][date]" class="form-control">
+                    <input type="date" name="certifications[${idx}][date]" class="form-control">
                 </div>
             </div>
         `;

@@ -1,6 +1,33 @@
 {% extends 'base.html' %}
 
-{% block title %}Admin Dashboard - Techno Bucket{% endblock %}
+{% block extra_css %}
+<style>
+.nav-tabs .nav-link {
+    color: #adb5bd;
+    border-color: #495057 #495057 #dee2e6;
+    background-color: transparent;
+}
+.nav-tabs .nav-link:hover {
+    color: #ffffff;
+    border-color: #495057 #495057 #dee2e6;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+.nav-tabs .nav-link.active {
+    color: #ffffff;
+    background-color: #495057;
+    border-color: #495057 #495057 #dee2e6;
+}
+.message-preview {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.message-preview:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    padding: 4px;
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <section class="py-5">
@@ -52,7 +79,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <p class="text-secondary small mb-1">New Inquiries</p>
+                                <p class="text-secondary small mb-1">New Messages</p>
                                 <h2 class="mb-0">{{ new_inquiries }}</h2>
                             </div>
                             <div class="bg-success bg-opacity-25 rounded p-3">
@@ -64,100 +91,196 @@
             </div>
         </div>
         
-        <!-- Orders Table -->
-        <div class="card bg-secondary bg-opacity-10 border-secondary">
-            <div class="card-header bg-transparent border-secondary">
-                <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>Recent Orders</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-dark table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th class="border-secondary">Order ID</th>
-                                <th class="border-secondary">Service</th>
-                                <th class="border-secondary">Customer</th>
-                                <th class="border-secondary">Price</th>
-                                <th class="border-secondary">Status</th>
-                                <th class="border-secondary">Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for order in orders %}
-                            <tr>
-                                <td class="border-secondary">#{{ order.id|stringformat:"05d" }}</td>
-                                <td class="border-secondary">{{ order.service_name }}</td>
-                                <td class="border-secondary">{{ order.customer_name }}<br><small class="text-secondary">{{ order.email }}</small></td>
-                                <td class="border-secondary">₹{{ order.price|floatformat:0 }}</td>
-                                <td class="border-secondary">
-                                    {% if order.status == 'pending' %}
-                                    <span class="badge bg-warning">Pending</span>
-                                    {% elif order.status == 'in_progress' %}
-                                    <span class="badge bg-info">In Progress</span>
-                                    {% elif order.status == 'completed' %}
-                                    <span class="badge bg-success">Completed</span>
-                                    {% else %}
-                                    <span class="badge bg-secondary">{{ order.status }}</span>
-                                    {% endif %}
-                                </td>
-                                <td class="border-secondary">{{ order.created_at|date:"M d, Y" }}</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6" class="text-center text-secondary py-4">No orders yet</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="true">
+                    <i class="bi bi-briefcase me-2"></i>Orders
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages" type="button" role="tab" aria-controls="messages" aria-selected="false">
+                    <i class="bi bi-envelope me-2"></i>Messages
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="adminTabsContent">
+            <!-- Orders Tab -->
+            <div class="tab-pane fade show active" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                <!-- Orders Table -->
+                <div class="card bg-secondary bg-opacity-10 border-secondary">
+                    <div class="card-header bg-transparent border-secondary">
+                        <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>Recent Orders</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="border-secondary">Order ID</th>
+                                        <th class="border-secondary">Service</th>
+                                        <th class="border-secondary">Customer</th>
+                                        <th class="border-secondary">Price</th>
+                                        <th class="border-secondary">Status</th>
+                                        <th class="border-secondary">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in orders %}
+                                    <tr>
+                                        <td class="border-secondary">#{{ order.id|stringformat:"05d" }}</td>
+                                        <td class="border-secondary">Portfolio Order</td>
+                                        <td class="border-secondary">{{ order.full_name }}<br><small class="text-secondary">{{ order.email }}</small></td>
+                                        <td class="border-secondary">₹{{ order.amount_paid|floatformat:0 }}</td>
+                                        <td class="border-secondary">
+                                            {% if order.status == 'pending' %}
+                                            <span class="badge bg-warning">Pending</span>
+                                            {% elif order.status == 'in-progress' %}
+                                            <span class="badge bg-info">In Progress</span>
+                                            {% elif order.status == 'completed' %}
+                                            <span class="badge bg-success">Completed</span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">{{ order.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="border-secondary">{{ order.created_at|date:"M d, Y" }}</td>
+                                        <td class="border-secondary">
+                                            <a href="{% url 'download_order_pdf' order.id %}" class="btn btn-sm btn-outline-primary" title="Download PDF">
+                                                <i class="bi bi-file-earmark-pdf"></i> PDF
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center text-secondary py-4">No orders yet</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Service Form Submissions -->
+                {% if service_submissions %}
+                <div class="card bg-secondary bg-opacity-10 border-secondary mt-4">
+                    <div class="card-header bg-transparent border-secondary">
+                        <h5 class="mb-0"><i class="bi bi-clipboard-check me-2"></i>Service Form Submissions ({{ service_submissions|length }})</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="border-secondary">ID</th>
+                                        <th class="border-secondary">Service</th>
+                                        <th class="border-secondary">Customer</th>
+                                        <th class="border-secondary">Email</th>
+                                        <th class="border-secondary">Status</th>
+                                        <th class="border-secondary">Date</th>
+                                        <th class="border-secondary">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for submission in service_submissions %}
+                                    <tr>
+                                        <td class="border-secondary">#{{ submission.id }}</td>
+                                        <td class="border-secondary">
+                                            {% if submission.submission_type == 'ats_resume' %}
+                                            <span class="badge bg-primary">ATS Resume</span>
+                                            {% elif submission.submission_type == 'combo_pack' %}
+                                            <span class="badge bg-info">Combo Pack</span>
+                                            {% elif submission.submission_type == 'custom_project' %}
+                                            <span class="badge bg-success">Custom Project</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="border-secondary">{{ submission.name }}</td>
+                                        <td class="border-secondary">{{ submission.email }}</td>
+                                        <td class="border-secondary">
+                                            {% if submission.status == 'new' %}
+                                            <span class="badge bg-success">New</span>
+                                            {% elif submission.status == 'read' %}
+                                            <span class="badge bg-info">Read</span>
+                                            {% elif submission.status == 'replied' %}
+                                            <span class="badge bg-primary">Replied</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="border-secondary">{{ submission.created_at|date:"M d, Y" }}</td>
+                                        <td class="border-secondary">
+                                            <a href="{% url 'download_inquiry_pdf' submission.id %}" class="btn btn-sm btn-outline-primary" title="Download PDF">
+                                                <i class="bi bi-file-earmark-pdf"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
-        </div>
-        
-        <!-- Inquiries Table -->
-        <div class="card bg-secondary bg-opacity-10 border-secondary mt-4">
-            <div class="card-header bg-transparent border-secondary">
-                <h5 class="mb-0"><i class="bi bi-envelope me-2"></i>Contact Inquiries</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-dark table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th class="border-secondary">Name</th>
-                                <th class="border-secondary">Email</th>
-                                <th class="border-secondary">Service</th>
-                                <th class="border-secondary">Message</th>
-                                <th class="border-secondary">Status</th>
-                                <th class="border-secondary">Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for inquiry in inquiries %}
-                            <tr>
-                                <td class="border-secondary">{{ inquiry.name }}</td>
-                                <td class="border-secondary">{{ inquiry.email }}</td>
-                                <td class="border-secondary">{{ inquiry.service_name }}</td>
-                                <td class="border-secondary">
-                                    <span title="{{ inquiry.message }}">{{ inquiry.message|truncatechars:50 }}</span>
-                                </td>
-                                <td class="border-secondary">
+
+            <!-- Messages Tab -->
+            <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+                <div class="card bg-secondary bg-opacity-10 border-secondary">
+                    <div class="card-header bg-transparent border-secondary">
+                        <h5 class="mb-0"><i class="bi bi-envelope me-2"></i>Messages ({{ inquiries|length }})</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        {% for inquiry in inquiries %}
+                        <div class="border-bottom border-secondary p-3 {% if inquiry.status == 'new' %}bg-primary bg-opacity-10{% endif %}">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center mb-1">
+                                        {% if inquiry.status == 'new' %}
+                                        <i class="bi bi-circle-fill text-success me-2" style="font-size: 8px;"></i>
+                                        {% endif %}
+                                        <strong class="me-2">{{ inquiry.name }}</strong>
+                                        <span class="text-secondary">&lt;{{ inquiry.email }}&gt;</span>
+                                    </div>
+                                    <div class="mb-1">
+                                        <strong>
+                                            {% if inquiry.service_name %}
+                                                Inquiry about {{ inquiry.service_name }}
+                                            {% else %}
+                                                General Inquiry
+                                            {% endif %}
+                                        </strong>
+                                    </div>
+                                    <div class="text-secondary small">{{ inquiry.created_at|date:"M d, Y \a\t H:i" }}</div>
+                                </div>
+                                <div class="text-end">
                                     {% if inquiry.status == 'new' %}
                                     <span class="badge bg-success">New</span>
-                                    {% elif inquiry.status == 'responded' %}
-                                    <span class="badge bg-info">Responded</span>
+                                    {% elif inquiry.status == 'read' %}
+                                    <span class="badge bg-info">Read</span>
+                                    {% elif inquiry.status == 'replied' %}
+                                    <span class="badge bg-primary">Replied</span>
                                     {% else %}
                                     <span class="badge bg-secondary">{{ inquiry.status }}</span>
                                     {% endif %}
-                                </td>
-                                <td class="border-secondary">{{ inquiry.created_at|date:"M d, Y" }}</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6" class="text-center text-secondary py-4">No inquiries yet</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                    <a href="{% url 'download_inquiry_pdf' inquiry.id %}" class="btn btn-sm btn-outline-primary ms-2" title="Download PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="message-preview">
+                                {{ inquiry.message|truncatechars:150|linebreaks }}
+                                {% if inquiry.message|length > 150 %}
+                                <span class="text-secondary small">... (click to read more)</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center text-secondary py-5">
+                            <i class="bi bi-envelope-x fs-1 mb-3"></i>
+                            <p>No messages yet</p>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

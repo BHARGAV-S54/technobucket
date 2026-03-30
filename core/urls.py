@@ -12,4 +12,6 @@ urlpatterns = [
     path('admin-login/', views.admin_login, name='admin_login'),
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('admin-logout/', views.admin_logout_view, name='admin_logout'),
+    path('download/inquiry/<int:inquiry_id>/', views.download_inquiry_pdf, name='download_inquiry_pdf'),
+    path('download/order/<int:order_id>/', views.download_order_pdf, name='download_order_pdf'),
 ]
