@@ -1,11 +1,24 @@
 from django.shortcuts import render, redirect, get_object_or_404
+import os
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Service, Testimonial, ContactInquiry
 from django.utils.html import format_html
-from django.http import HttpResponse
-from .pdf_generator import generate_inquiry_pdf, generate_portfolio_order_pdf
+from django.http import HttpResponse, JsonResponse
+from django.urls import reverse
+from decimal import Decimal
+from django.core.mail import EmailMessage
+import base64
+import json
+from urllib import request as urlrequest
+from urllib.error import URLError, HTTPError
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from .pdf_generator import (
+    generate_inquiry_pdf,
+    generate_portfolio_order_pdf,
+    generate_payment_invoice,
+)
 
 
 def home(request):
@@ -172,6 +185,7 @@ def contact(request):
             ip_address=get_client_ip(request)
         )
         
+        service = None
         if service_id:
             try:
                 service = Service.objects.get(id=service_id)
@@ -182,6 +196,12 @@ def contact(request):
         
         inquiry.save()
         messages.success(request, 'Your message has been sent! We will get back to you soon.')
+
+        # If a specific service was selected, send user to payment for that service
+        if service:
+            payment_url = reverse('payment') + f"?service_slug={service.slug}&order_type=inquiry&record_id={inquiry.id}"
+            return redirect(payment_url)
+
         return redirect('contact')
     
     services_list = Service.objects.filter(is_active=True)
@@ -277,8 +297,12 @@ def ats_resume_form(request):
             inquiry.service_name = ats_service.name
 
         inquiry.save()
-        messages.success(request, 'Your details have been submitted! We will contact you with your ATS-optimized resume plan.')
-        return redirect('services')
+        messages.success(request, 'Your details have been submitted! Complete payment to confirm your ATS resume order.')
+
+        payment_url = reverse('payment')
+        if ats_service:
+            payment_url = f"{payment_url}?service_slug={ats_service.slug}&order_type=inquiry&record_id={inquiry.id}"
+        return redirect(payment_url)
 
     return render(request, 'core/ats_resume_form.html')
 
@@ -315,15 +339,201 @@ def combo_pack_form(request):
 
         inquiry.save()
         messages.success(request, 'Thanks! Your combo pack request is in. Proceed to payment to confirm your order.')
-        return redirect('payment')
+
+        payment_url = reverse('payment')
+        if combo_service:
+            payment_url = f"{payment_url}?service_slug={combo_service.slug}&order_type=inquiry&record_id={inquiry.id}"
+        return redirect(payment_url)
 
     return render(request, 'core/combo_pack_form.html')
 
 
 def payment_page(request):
-    """Simple payment handoff page"""
-    combo_service = Service.objects.filter(is_active=True, is_combo=True).first()
-    return render(request, 'core/payment.html', {'combo_service': combo_service})
+    """Payment handoff page (works for any service)"""
+    service_slug = request.GET.get('service_slug')
+    order_type = request.GET.get('order_type')
+    record_id = request.GET.get('record_id')
+    selected_service = None
+
+    if service_slug:
+        selected_service = Service.objects.filter(slug=service_slug, is_active=True).first()
+
+    # Fallback to combo service
+    if not selected_service:
+        selected_service = Service.objects.filter(is_active=True, is_combo=True).first()
+
+    return render(request, 'core/payment.html', {
+        'selected_service': selected_service,
+        # keep old name for template backward-compatibility
+        'combo_service': selected_service,
+        'razorpay_key': os.environ.get('RAZORPAY_KEY_ID', ''),
+        'order_type': order_type or '',
+        'record_id': record_id or '',
+    })
+
+
+@csrf_exempt
+def create_razorpay_order(request):
+    """Create a Razorpay order and return order details for checkout"""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    try:
+        body = json.loads(request.body.decode() or "{}")
+    except json.JSONDecodeError:
+        body = {}
+
+    service_slug = body.get('service_slug') or request.POST.get('service_slug')
+    order_type = body.get('order_type') or request.POST.get('order_type')
+    record_id = body.get('record_id') or request.POST.get('record_id')
+
+    selected_service = None
+    if service_slug:
+        selected_service = Service.objects.filter(slug=service_slug, is_active=True).first()
+
+    if not selected_service:
+        selected_service = Service.objects.filter(is_active=True, is_combo=True).first()
+
+    if not selected_service:
+        return JsonResponse({'error': 'Service not configured'}, status=400)
+
+    key_id = os.environ.get('RAZORPAY_KEY_ID')
+    key_secret = os.environ.get('RAZORPAY_KEY_SECRET')
+    if not key_id or not key_secret:
+        return JsonResponse({'error': 'Razorpay keys missing'}, status=500)
+
+    try:
+        amount_paise = int(Decimal(selected_service.price) * 100)
+    except Exception:
+        return JsonResponse({'error': 'Invalid service amount'}, status=400)
+
+    auth_str = f"{key_id}:{key_secret}"
+    auth_header = base64.b64encode(auth_str.encode()).decode()
+
+    payload = {
+        "amount": amount_paise,
+        "currency": "INR",
+        "receipt": f"{selected_service.slug}_{selected_service.id}",
+        "payment_capture": 1,
+        "notes": {
+            "service": selected_service.name,
+            "order_type": order_type or "",
+            "record_id": str(record_id or ""),
+        },
+    }
+
+    req = urlrequest.Request(
+        "https://api.razorpay.com/v1/orders",
+        data=json.dumps(payload).encode(),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Basic {auth_header}",
+        },
+        method="POST",
+    )
+
+    try:
+        with urlrequest.urlopen(req, timeout=10) as res:
+            body = res.read().decode()
+            data = json.loads(body)
+            return JsonResponse({
+                "order_id": data.get("id"),
+                "amount": data.get("amount"),
+                "currency": data.get("currency"),
+                "razorpay_key": key_id,
+                "order_type": order_type,
+                "record_id": record_id,
+            })
+    except HTTPError as e:
+        return JsonResponse({'error': 'Failed to create order', 'details': e.read().decode()}, status=500)
+    except URLError as exc:
+        return JsonResponse({'error': 'Network error creating order', 'details': str(exc)}, status=500)
+
+
+@csrf_exempt
+def payment_confirm(request):
+    """Mark an order/inquiry as paid, generate invoice PDF, and email the customer."""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    try:
+        body = json.loads(request.body.decode() or "{}")
+    except json.JSONDecodeError:
+        body = {}
+
+    order_type = body.get('order_type')
+    record_id = body.get('record_id')
+    payment_id = body.get('razorpay_payment_id') or body.get('payment_id')
+    razorpay_order_id = body.get('razorpay_order_id')
+
+    if not order_type or not record_id or not payment_id:
+        return JsonResponse({'error': 'Missing payment details'}, status=400)
+
+    customer_name = ''
+    customer_email = ''
+    service_name = ''
+    amount_paid = Decimal('0')
+
+    if order_type == 'portfolio':
+        from orders.models import PortfolioOrder
+        order = get_object_or_404(PortfolioOrder, id=record_id)
+        service = Service.objects.filter(slug='portfolio-website').first()
+        if service:
+            amount_paid = Decimal(service.price)
+            order.amount_paid = amount_paid
+        else:
+            amount_paid = order.amount_paid
+        order.payment_status = 'paid'
+        order.save(update_fields=['payment_status', 'amount_paid', 'updated_at'])
+
+        customer_name = order.full_name
+        customer_email = order.email
+        service_name = service.name if service else 'Portfolio Website'
+
+    elif order_type == 'inquiry':
+        inquiry = get_object_or_404(ContactInquiry, id=record_id)
+        service = inquiry.service
+        if service:
+            amount_paid = Decimal(service.price)
+            inquiry.amount_paid = amount_paid
+            service_name = service.name
+        inquiry.payment_status = 'paid'
+        inquiry.status = 'completed'
+        inquiry.save(update_fields=['payment_status', 'status', 'amount_paid', 'updated_at'])
+
+        customer_name = inquiry.name
+        customer_email = inquiry.email
+        service_name = service_name or inquiry.service_name or 'Service'
+    else:
+        return JsonResponse({'error': 'Invalid order type'}, status=400)
+
+    # Generate invoice
+    invoice_buffer = generate_payment_invoice(
+        customer_name=customer_name or 'Customer',
+        service_name=service_name,
+        amount=amount_paid,
+        payment_id=payment_id,
+        razorpay_order_id=razorpay_order_id,
+    )
+
+    # Email invoice
+    subject = f"Payment received for {service_name}"
+    body = (
+        f"Hi {customer_name},\n\n"
+        f"Thanks for your payment for {service_name}. Your payment ID is {payment_id}.\n"
+        f"We've attached your invoice.\n\n"
+        "If you have any questions, just reply to this email.\n\n"
+        "— Techno Bucket Team"
+    )
+    try:
+        email = EmailMessage(subject=subject, body=body, to=[customer_email])
+        email.attach('invoice.pdf', invoice_buffer.getvalue(), 'application/pdf')
+        email.send(fail_silently=True)
+    except Exception:
+        # Fail silently but still return success
+        pass
+
+    return JsonResponse({'success': True})
 
 
 def admin_login(request):
@@ -359,6 +569,7 @@ def admin_login(request):
 
 
 @login_required
+@ensure_csrf_cookie
 def admin_dashboard(request):
     """Admin dashboard view"""
     from orders.models import PortfolioOrder
@@ -383,6 +594,7 @@ def admin_dashboard(request):
     context = {
         'orders': portfolio_orders,
         'service_submissions': service_submissions,
+        'all_orders': all_orders,
         'inquiries': inquiries,
         'new_inquiries': inquiries.filter(status='new').count(),
         'total_orders': portfolio_orders.count() + service_submissions.count(),
@@ -429,3 +641,26 @@ def download_order_pdf(request, order_id):
     response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="order_{order.id:05d}_{order.full_name.replace(" ", "_")}.pdf"'
     return response
+
+
+@login_required
+def update_inquiry_status(request, inquiry_id):
+    """Update the status of a contact inquiry (used by admin dashboard)"""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    inquiry = get_object_or_404(ContactInquiry, id=inquiry_id)
+    new_status = request.POST.get('status', 'read')
+
+    valid_statuses = {choice[0] for choice in ContactInquiry.STATUS_CHOICES}
+    if new_status not in valid_statuses:
+        return JsonResponse({'error': 'Invalid status'}, status=400)
+
+    inquiry.status = new_status
+    inquiry.save(update_fields=['status', 'updated_at'])
+
+    return JsonResponse({
+        'success': True,
+        'status': inquiry.status,
+        'updated_at': inquiry.updated_at.strftime('%b %d, %Y at %H:%M')
+    })

@@ -206,3 +206,62 @@ def generate_portfolio_order_pdf(order):
     doc.build(content)
     buffer.seek(0)
     return buffer
+
+
+def generate_payment_invoice(customer_name, service_name, amount, payment_id, razorpay_order_id=None):
+    """Generate a simple payment invoice PDF."""
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    styles = getSampleStyleSheet()
+
+    title_style = ParagraphStyle(
+        'InvoiceTitle',
+        parent=styles['Heading1'],
+        fontSize=18,
+        spaceAfter=20,
+        alignment=1
+    )
+
+    section_style = ParagraphStyle(
+        'Section',
+        parent=styles['Heading2'],
+        fontSize=14,
+        spaceAfter=10,
+        textColor=colors.darkblue
+    )
+
+    content = []
+    content.append(Paragraph("Payment Invoice", title_style))
+    content.append(Spacer(1, 12))
+
+    meta_data = [
+        ["Customer", customer_name],
+        ["Service", service_name or "Service"],
+        ["Amount Paid", f"₹{amount}"],
+        ["Payment ID", payment_id],
+        ["Razorpay Order ID", razorpay_order_id or "—"],
+        ["Date", timezone.now().strftime("%B %d, %Y at %I:%M %p")],
+    ]
+
+    table = Table(meta_data, colWidths=[2.5*inch, 3.5*inch])
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+    content.append(table)
+    content.append(Spacer(1, 24))
+
+    content.append(Paragraph(
+        "Thank you for your payment. If you have any questions about this invoice, please contact us.",
+        styles['Normal']
+    ))
+
+    doc.build(content)
+    buffer.seek(0)
+    return buffer

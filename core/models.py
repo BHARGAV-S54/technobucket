@@ -52,7 +52,14 @@ class ContactInquiry(models.Model):
         ('new', 'New'),
         ('read', 'Read'),
         ('replied', 'Replied'),
+        ('completed', 'Completed'),
         ('spam', 'Spam'),
+    ]
+
+    PAYMENT_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('paid', 'Paid'),
+        ('refunded', 'Refunded'),
     ]
 
     SUBMISSION_TYPE_CHOICES = [
@@ -68,6 +75,8 @@ class ContactInquiry(models.Model):
     service_name = models.CharField(max_length=255, blank=True)
     message = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='pending')
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     submission_type = models.CharField(max_length=20, choices=SUBMISSION_TYPE_CHOICES, default='inquiry')
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

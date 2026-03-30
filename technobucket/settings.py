@@ -13,7 +13,14 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-produc
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
+# Allow common local hosts by default; can be overridden via env
+_hosts_env = os.environ.get('ALLOWED_HOSTS', '').strip()
+if not _hosts_env:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0']
+else:
+    ALLOWED_HOSTS = [h.strip() for h in _hosts_env.split(',') if h.strip()]
+    if '*' in ALLOWED_HOSTS:
+        ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',

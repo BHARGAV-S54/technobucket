@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
+from django.urls import reverse
+from core.models import Service
 from .models import PortfolioOrder, PortfolioFile
 import json
 
@@ -11,9 +13,9 @@ def portfolio_order(request):
         # Get form data
         full_name = request.POST.get('name')
         email = request.POST.get('email')
-        github_profile = request.POST.get('github_profile')
-        leetcode_profile = request.POST.get('leetcode_profile')
-        linkedin_profile = request.POST.get('linkedin_profile')
+        github_profile = request.POST.get('github_profile', '')
+        leetcode_profile = request.POST.get('leetcode_profile', '')
+        linkedin_profile = request.POST.get('linkedin_profile', '')
         skills = request.POST.get('skills')
         extra_information = request.POST.get('extra_information', '')
         
@@ -32,9 +34,9 @@ def portfolio_order(request):
         order = PortfolioOrder.objects.create(
             full_name=full_name,
             email=email,
-            github_profile=github_profile,
-            leetcode_profile=leetcode_profile,
-            linkedin_profile=linkedin_profile,
+            github_profile=github_profile or '',
+            leetcode_profile=leetcode_profile or '',
+            linkedin_profile=linkedin_profile or '',
             skills=skills_list,
             project_links=project_links,
             extra_information=extra_information,
@@ -83,8 +85,18 @@ def portfolio_order(request):
                     mime_type=cert.content_type
                 )
         
-        messages.success(request, 'Your order has been submitted successfully! We will contact you soon.')
-        return redirect('services')
+        # Align payable amount with the service price if available
+        portfolio_service = Service.objects.filter(slug='portfolio-website', is_active=True).first()
+        if portfolio_service:
+            order.amount_paid = portfolio_service.price
+            order.save(update_fields=['amount_paid'])
+
+        messages.success(request, 'Your order has been submitted! Complete payment to confirm your portfolio build.')
+
+        payment_url = reverse('payment')
+        if portfolio_service:
+            payment_url = f"{payment_url}?service_slug={portfolio_service.slug}&order_type=portfolio&record_id={order.id}"
+        return redirect(payment_url)
     
     return render(request, 'orders/portfolio_order.html')
 
