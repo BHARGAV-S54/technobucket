@@ -125,6 +125,14 @@
       height: '100%',
       display: 'block'
     });
+
+    const gl = canvas.getContext('webgl', { antialias: false, preserveDrawingBuffer: false });
+    if (!gl) {
+      console.error('WebGL not supported for lightning');
+      container.classList.add('hero-lightning-fallback');
+      return;
+    }
+
     container.appendChild(canvas);
 
     const resizeCanvas = () => {
@@ -142,23 +150,27 @@
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    const gl = canvas.getContext('webgl', { antialias: false, preserveDrawingBuffer: false });
-    if (!gl) {
-      console.error('WebGL not supported for lightning');
+    const vs = compile(gl, vertexShaderSource, gl.VERTEX_SHADER);
+    const fs = compile(gl, fragmentShaderSource, gl.FRAGMENT_SHADER);
+    if (!vs || !fs) {
+      container.classList.add('hero-lightning-fallback');
+      container.contains(canvas) && container.removeChild(canvas);
       return;
     }
 
-    const vs = compile(gl, vertexShaderSource, gl.VERTEX_SHADER);
-    const fs = compile(gl, fragmentShaderSource, gl.FRAGMENT_SHADER);
-    if (!vs || !fs) return;
-
     const program = gl.createProgram();
-    if (!program) return;
+    if (!program) {
+      container.classList.add('hero-lightning-fallback');
+      container.contains(canvas) && container.removeChild(canvas);
+      return;
+    }
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       console.error('Lightning program link error:', gl.getProgramInfoLog(program));
+      container.classList.add('hero-lightning-fallback');
+      container.contains(canvas) && container.removeChild(canvas);
       return;
     }
     gl.useProgram(program);
