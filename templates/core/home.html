@@ -12,7 +12,8 @@
 
     <!-- Hero Section -->
     <section class="hero-section home-hero-section py-5 py-lg-7">
-        <div id="hero-lightning" class="hero-lightning" aria-hidden="true"></div>
+        <!-- Default fallback class added so a gradient/animation shows even if JS/WebGL fails -->
+        <div id="hero-lightning" class="hero-lightning hero-lightning-fallback" aria-hidden="true"></div>
         <div class="container home-hero-container text-center py-5">
             <div
                 class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill bg-secondary bg-opacity-25 border border-secondary mb-4">
@@ -63,7 +64,8 @@
 
     <!-- Features + Services (Single Screen) -->
     <section class="home-offers-section py-5" style="position: relative; overflow: hidden;">
-        <div id="aurora-container" class="soft-aurora-container" aria-hidden="true"></div>
+        <!-- Default fallback class so the aurora animates without JS -->
+        <div id="aurora-container" class="soft-aurora-container soft-aurora-fallback" aria-hidden="true"></div>
         <div class="container home-offers-container">
             <div class="row g-3 home-feature-grid">
                 <div class="col-4">

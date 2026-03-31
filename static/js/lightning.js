@@ -135,6 +135,7 @@
     }
 
     container.appendChild(canvas);
+    container.classList.remove('hero-lightning-fallback');
 
     const resizeCanvas = () => {
       const host = container.getBoundingClientRect();

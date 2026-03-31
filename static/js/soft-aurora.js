@@ -216,6 +216,7 @@ function initAurora(container) {
 
   const mesh = new Mesh(gl, { geometry, program });
   container.appendChild(gl.canvas);
+  container.classList.remove('soft-aurora-fallback');
   Object.assign(gl.canvas.style, {
     position: 'absolute',
     inset: '0',
