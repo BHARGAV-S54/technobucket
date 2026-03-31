@@ -22,7 +22,7 @@ else:
         re_path(
             r"^static/(?P<path>.*)$",
             serve,
-            {"document_root": settings.STATICFILES_DIRS[0]},
+            {"document_root": settings.STATIC_ROOT},
         ),
         re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
     ]

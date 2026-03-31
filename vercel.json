@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "technobucket/wsgi.py",
@@ -15,6 +16,7 @@
       "dest": "technobucket/wsgi.py"
     }
   ],
+  "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --noinput",
   "installCommand": "pip install -r requirements.txt",
   "env": {
     "DJANGO_SETTINGS_MODULE": "technobucket.settings",

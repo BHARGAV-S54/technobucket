@@ -1,0 +1,2 @@
+# Don't ignore static files - they need to be deployed
+!static/
