@@ -123,10 +123,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# WhiteNoise compression and caching
-# Vercel serves `/static/*` directly from the `static/` directory (see `vercel.json`),
-# so keep Django's built-in staticfiles storage backend.
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
