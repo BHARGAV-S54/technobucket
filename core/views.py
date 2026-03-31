@@ -14,6 +14,7 @@ import json
 from urllib import request as urlrequest
 from urllib.error import URLError, HTTPError
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django.db import OperationalError
 from .pdf_generator import (
     generate_inquiry_pdf,
     generate_portfolio_order_pdf,
@@ -23,8 +24,16 @@ from .pdf_generator import (
 
 def home(request):
     """Home page view"""
-    services = list(Service.objects.filter(is_active=True, is_combo=False)[:4])
-    testimonials = list(Testimonial.objects.filter(is_active=True, is_featured=True)[:3])
+    services = []
+    testimonials = []
+
+    try:
+        services = list(Service.objects.filter(is_active=True, is_combo=False)[:4])
+        testimonials = list(Testimonial.objects.filter(is_active=True, is_featured=True)[:3])
+    except OperationalError:
+        # Database not ready (e.g., migrations not applied in deployment). Use in-memory fallback content.
+        services = []
+        testimonials = []
 
     # Provide a fallback set of demo content when the database is empty.
     if not services:
@@ -86,8 +95,15 @@ def home(request):
 
 def services(request):
     """Services page view"""
-    services = list(Service.objects.filter(is_active=True, is_combo=False))
-    combo_pack = Service.objects.filter(is_active=True, is_combo=True).first()
+    services = []
+    combo_pack = None
+
+    try:
+        services = list(Service.objects.filter(is_active=True, is_combo=False))
+        combo_pack = Service.objects.filter(is_active=True, is_combo=True).first()
+    except OperationalError:
+        services = []
+        combo_pack = None
 
     # Provide sensible demo content when DB has no entries yet
     if not combo_pack:
@@ -204,7 +220,11 @@ def contact(request):
 
         return redirect('contact')
     
-    services_list = Service.objects.filter(is_active=True)
+    try:
+        services_list = Service.objects.filter(is_active=True)
+    except OperationalError:
+        services_list = []
+
     # Prefill support (used by Custom Project "Order" CTA)
     selected_service_id = request.GET.get('service', '') or ''
     prefill_message = request.GET.get('message', '') or ''
