@@ -101,6 +101,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # WhiteNoise compression and caching
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Allow WhiteNoise to serve files straight from STATICFILES_DIRS in development
+if DEBUG:
+    WHITENOISE_USE_FINDERS = True
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
