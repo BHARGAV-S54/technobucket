@@ -28,3 +28,36 @@
     mix-blend-mode: screen;
     opacity: 0.55;
 }
+
+/* Logo animation */
+.logo-img {
+    animation: logo-rotate-pulse 4s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.navbar-brand span.text-gradient-shimmer {
+    animation: text-gradient 6s ease-in-out infinite;
+    background-size: 200% 100%;
+}
+
+@keyframes logo-rotate-pulse {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(2deg) scale(1.03); }
+}
+
+@keyframes text-gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.hero-lightning-fallback {
+    background: radial-gradient(140% 140% at 50% 40%, rgba(79, 70, 229, 0.26), rgba(5, 7, 15, 0.95));
+    animation: lightning-fallback 4s ease-in-out infinite alternate;
+}
+
+@keyframes lightning-fallback {
+    0% { opacity: 0.35; }
+    50% { opacity: 0.9; }
+    100% { opacity: 0.45; }
+}

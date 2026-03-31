@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +8,7 @@
     <title>{% block title %}Techno Bucket{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 
@@ -16,7 +17,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
-                <img src="/static/images/logo.png" alt="Techno Bucket" class="logo-img"
+                <img src="{% static 'images/logo.png' %}" alt="Techno Bucket" class="logo-img"
                     style="height: 50px; width: auto; margin-right: 10px;">
                 <span class="fw-bold"
                     style="background: linear-gradient(to right, #22d3ee, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
@@ -87,7 +88,7 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <div class="d-flex align-items-center">
-                        <img src="/static/images/logo.png" alt="Techno Bucket"
+                        <img src="{% static 'images/logo.png' %}" alt="Techno Bucket"
                             style="height: 35px; width: auto; margin-right: 10px;">
                         <span class="fw-semibold text-secondary">Techno Bucket</span>
                     </div>
@@ -101,8 +102,8 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/js/main.js"></script>
-    <script src="/static/js/electric-border.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/electric-border.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 
