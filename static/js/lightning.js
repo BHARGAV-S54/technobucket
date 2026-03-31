@@ -1,4 +1,4 @@
-﻿// Lightning background for hero section (based on provided shader snippet)
+// Lightning background for hero section (based on provided shader snippet)
 (function () {
   const settings = {
     hue: 220, // cooler blue-purple to match site gradient
