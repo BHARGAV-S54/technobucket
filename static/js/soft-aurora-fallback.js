@@ -10,6 +10,10 @@
         if (container.querySelector('canvas')) return;
 
         container.classList.add('soft-aurora-fallback');
+        container.style.position = container.style.position || 'absolute';
+        container.style.inset = '0';
+        container.style.zIndex = '0';
+        container.style.pointerEvents = 'none';
 
         // Add subtle animation to the fallback
         let hue = 0;

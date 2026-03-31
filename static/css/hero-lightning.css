@@ -14,6 +14,25 @@
     background: radial-gradient(140% 140% at 50% 40%, rgba(79, 70, 229, 0.28), rgba(5, 7, 15, 0.95));
 }
 
+.soft-aurora-container {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background: radial-gradient(140% 120% at 50% 30%, rgba(34, 211, 238, 0.08), rgba(79, 70, 229, 0.12), rgba(5, 7, 15, 0.96));
+}
+
+.soft-aurora-fallback {
+    animation: aurora-fallback 10s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-fallback {
+    0% { background-position: 20% 30%; opacity: 0.7; }
+    50% { background-position: 80% 70%; opacity: 0.9; }
+    100% { background-position: 30% 50%; opacity: 0.8; }
+}
+
 .hero-section > * {
     position: relative;
     z-index: 1;
