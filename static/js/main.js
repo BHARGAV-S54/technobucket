@@ -82,7 +82,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Generic utility that triggers once when whole document loads
 window.addEventListener('load', () => {
-    // Hide page loader
+    hideLoader();
+
+    const offers = document.querySelectorAll('.home-offer-card');
+    offers.forEach((card, index) => {
+        card.style.transitionDelay = `${index * 120}ms`;
+    });
+});
+
+// Navigation loader logic
+function showLoader() {
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+        loader.style.display = 'flex';
+        // Force reflow
+        void loader.offsetWidth;
+        loader.classList.remove('fade-out');
+    }
+}
+
+function hideLoader() {
     const loader = document.getElementById('page-loader');
     if (loader) {
         loader.classList.add('fade-out');
@@ -90,9 +109,39 @@ window.addEventListener('load', () => {
             loader.style.display = 'none';
         }, 600);
     }
+}
 
-    const offers = document.querySelectorAll('.home-offer-card');
-    offers.forEach((card, index) => {
-        card.style.transitionDelay = `${index * 120}ms`;
-    });
+// Global listener for navigation clicks to show loader before leaving page
+document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    
+    // Check if it's a valid internal link navigation
+    if (link && 
+        link.href && 
+        !link.getAttribute('target') && 
+        link.host === window.location.host &&
+        !link.href.includes('#') && 
+        !link.href.startsWith('mailto:') &&
+        !link.href.startsWith('tel:') &&
+        !e.ctrlKey && !e.shiftKey && !e.metaKey && e.button === 0) {
+            
+        // Show loader before navigating
+        showLoader();
+    }
+});
+
+// Handle browser back-forward cache (bfcache)
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        hideLoader();
+    }
+});
+
+// Show loader on form submissions
+document.addEventListener('submit', (e) => {
+    // Only for standard form submissions (not ones with target="_blank")
+    const form = e.target;
+    if (form && !form.getAttribute('target')) {
+        showLoader();
+    }
 });
