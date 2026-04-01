@@ -10,11 +10,10 @@ django.setup()
 
 from django.conf import settings
 db_name = str(settings.DATABASES["default"].get("NAME", ""))
-if "tmp" in db_name or db_name.startswith("/tmp"):
-    from django.core.management import call_command
-    try:
-        call_command("migrate", "--run-syncdb", verbosity=0)
-    except Exception:
-        pass
+from django.core.management import call_command
+try:
+    call_command("migrate", "--run-syncdb", verbosity=0)
+except Exception:
+    pass
 
 application = get_wsgi_application()
