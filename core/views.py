@@ -631,9 +631,7 @@ def admin_dashboard(request):
     """Admin dashboard view"""
     from orders.models import PortfolioOrder
 
-    portfolio_orders = (
-        PortfolioOrder.objects.select_related("service").all().order_by("-created_at")
-    )
+    portfolio_orders = PortfolioOrder.objects.all().order_by("-created_at")
 
     service_submissions = (
         ContactInquiry.objects.select_related("service")
