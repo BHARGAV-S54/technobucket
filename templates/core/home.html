@@ -176,8 +176,8 @@
 {% endblock %}
 
 {% block extra_js %}
-<script type="module" src="{% static 'js/soft-aurora.js' %}"></script>
-<script type="module" src="{% static 'js/lightning.js' %}"></script>
+<script src="{% static 'js/soft-aurora.js' %}"></script>
+<script src="{% static 'js/lightning.js' %}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const animateElements = document.querySelectorAll('.home-offer-card, .home-offers-title, .home-offers-subtitle');

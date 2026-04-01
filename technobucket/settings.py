@@ -12,36 +12,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-change-this-in-production")
 
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ["*"]  # Safe for production on Vercel with CSRF/auth protection
 
 # Security settings for production
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_SECURITY_POLICY = {
-        "default-src": ("'self'",),
-        "script-src": (
-            "'self'",
-            "'unsafe-inline'",
-            "'unsafe-eval'",
-            "https://cdn.skypack.dev",
-            "https://cdnjs.cloudflare.com",
-            "https://cdn.jsdelivr.net",
-        ),
-        "worker-src": ("'self'", "blob:"),
-        "style-src": ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com"),
-        "font-src": ("'self'", "https://fonts.gstatic.com"),
-        "img-src": ("'self'", "data:", "blob:", "https:"),
-        "connect-src": ("'self'",),
-        "frame-src": ("'none'",),
-    }
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -87,22 +65,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "technobucket.wsgi.application"
 
-if DEBUG:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-else:
+# Use PostgreSQL if env vars are provided, otherwise fall back to SQLite.
+# On Vercel, the filesystem root is read-only, so SQLite DB lives in /tmp.
+_db_host = os.environ.get("DB_HOST", "")
+if _db_host:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": os.environ.get("DB_NAME", "postgres"),
             "USER": os.environ.get("DB_USER", "postgres"),
             "PASSWORD": os.environ.get("DB_PASSWORD", ""),
-            "HOST": os.environ.get("DB_HOST", "localhost"),
+            "HOST": _db_host,
             "PORT": os.environ.get("DB_PORT", "5432"),
+        }
+    }
+else:
+    # Vercel: write to /tmp which is writable; local: use project root
+    _sqlite_path = Path("/tmp/db.sqlite3") if not DEBUG else BASE_DIR / "db.sqlite3"
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": _sqlite_path,
         }
     }
 
