@@ -17,6 +17,21 @@
     background-color: #495057;
     border-color: #495057 #495057 #dee2e6;
 }
+.skeleton-shimmer {
+    background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 4px;
+    display: inline-block;
+    min-height: 1.2em;
+    width: 100%;
+}
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+.skeleton-card { height: 100px; margin-bottom: 1rem; }
+.skeleton-row { height: 40px; margin-bottom: 0.5rem; }
 .message-preview {
     cursor: pointer;
     transition: background-color 0.2s;
