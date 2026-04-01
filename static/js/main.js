@@ -55,12 +55,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const heroSection = document.querySelector('.home-hero-section');
     if (heroSection) {
         let angle = 0;
-        const heroAnimation = (t) => {
+        let pageVisible = true;
+        let heroRaf;
+        const heroAnimation = () => {
+            heroRaf = requestAnimationFrame(heroAnimation);
+            if (!pageVisible) return;
             angle += 0.01;
             heroSection.style.background = `radial-gradient(circle at 45% 35%, rgba(34, 211, 238, 0.18) ${45 + Math.sin(angle) * 3}%, rgba(168, 85, 247, 0.09) ${60 + Math.cos(angle) * 3}%, #05070f 100%)`;
-            window.requestAnimationFrame(heroAnimation);
         };
-        window.requestAnimationFrame(heroAnimation);
+        heroRaf = requestAnimationFrame(heroAnimation);
+        document.addEventListener('visibilitychange', () => {
+            pageVisible = document.visibilityState === 'visible';
+        });
     }
 
     // Fallback for aurora/lightning if module script can't run

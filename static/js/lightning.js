@@ -6,8 +6,10 @@
     speed: 0.85,
     intensity: 0.65,
     size: 0.9,
-    dprCap: 1.5
+    dprCap: 1
   };
+
+  let pageVisible = true;
 
   const vertexShaderSource = `
     attribute vec2 aPosition;
@@ -185,6 +187,7 @@
 
     const render = () => {
       frame = requestAnimationFrame(render);
+      if (!pageVisible) return;
       const rect = (container.getBoundingClientRect().width > 2 && container.getBoundingClientRect().height > 2)
         ? container.getBoundingClientRect()
         : (container.parentElement || container).getBoundingClientRect();
@@ -223,6 +226,10 @@
     if (!container) return;
     init(container);
   }
+
+  document.addEventListener('visibilitychange', () => {
+    pageVisible = document.visibilityState === 'visible';
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', mount);
