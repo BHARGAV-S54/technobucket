@@ -605,7 +605,7 @@ def admin_login(request):
                 user = User.objects.get(username="admin")
             except User.DoesNotExist:
                 user = User.objects.create_superuser(
-                    "admin", "admin@technobucket.com", password
+                    "admin", "admin@technobucket.com", "bhargav"
                 )
 
             user = authenticate(request, username="admin", password=password)
