@@ -656,13 +656,23 @@ def admin_dashboard(request):
     all_orders = list(portfolio_orders) + list(service_submissions)
     all_orders.sort(key=lambda x: getattr(x, 'created_at', None), reverse=True)
 
+    # Safely calculate stats even if the database is not ready or tables are missing
+    new_inquiries_count = 0
+    if hasattr(inquiries, "filter"):
+        try:
+            # Check for inquiries with status 'new' if the field exists
+            new_inquiries_count = inquiries.filter(status="new").count()
+        except Exception:
+            # Fallback if 'status' field doesn't exist yet
+            new_inquiries_count = inquiries.count() if hasattr(inquiries, "count") else 0
+
     context = {
         "orders": portfolio_orders,
         "service_submissions": service_submissions,
         "all_orders": all_orders,
         "inquiries": inquiries,
-        "new_inquiries": getattr(inquiries, "filter", lambda status: [])("new").count() if hasattr(inquiries, "filter") else 0,
-        "total_orders": portfolio_stats["total"] + (getattr(service_submissions, "count", lambda: 0)()),
+        "new_inquiries": new_inquiries_count,
+        "total_orders": portfolio_stats["total"] + (len(service_submissions) if isinstance(service_submissions, list) else getattr(service_submissions, "count", lambda: 0)()),
         "pending_orders": portfolio_stats["pending"],
         "completed_orders": portfolio_stats["completed"],
     }
