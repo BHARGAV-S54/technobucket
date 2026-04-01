@@ -17,4 +17,7 @@ urlpatterns = [
     path('download/inquiry/<int:inquiry_id>/', views.download_inquiry_pdf, name='download_inquiry_pdf'),
     path('download/order/<int:order_id>/', views.download_order_pdf, name='download_order_pdf'),
     path('admin/messages/<int:inquiry_id>/status/', views.update_inquiry_status, name='update_inquiry_status'),
+    path('about/', views.about, name='about'),
+    path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
 ]

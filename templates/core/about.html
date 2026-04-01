@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - Techno Bucket{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">About <span class="text-primary">Techno Bucket</span></h1>
+                <p class="lead text-secondary mb-5">Building the future of digital presence, one project at a time.</p>
+                
+                <div class="card bg-secondary bg-opacity-10 border-secondary mb-4">
+                    <div class="card-body p-4">
+                        <h3 class="h4 mb-3">Our Mission</h3>
+                        <p class="text-secondary">At Techno Bucket, we empower developers, students, and professionals to showcase their best work through premium digital solutions. From ATS-optimized resumes to custom full-stack applications, we bridge the gap between talent and opportunity.</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card bg-secondary bg-opacity-10 border-secondary h-100">
+                            <div class="card-body p-4">
+                                <h4 class="h5 mb-3"><i class="bi bi-code-slash text-primary me-2"></i>Innovation</h4>
+                                <p class="text-secondary small">We leverage the latest technology stacks to build robust, scalable, and modern web applications.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-secondary bg-opacity-10 border-secondary h-100">
+                            <div class="card-body p-4">
+                                <h4 class="h5 mb-3"><i class="bi bi-palette text-primary me-2"></i>Design</h4>
+                                <p class="text-secondary small">Our designs prioritize user experience and visual excellence, ensuring your brand stands out.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-5 text-center">
+                    <p class="text-secondary">Interested in working with us?</p>
+                    <a href="{% url 'contact' %}" class="btn btn-primary">Get in Touch</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -670,9 +670,26 @@ def admin_dashboard(request):
 
 
 def admin_logout_view(request):
-    """Admin logout view"""
+    """Logout view for admin"""
+    from django.contrib.auth import logout
     logout(request)
+    messages.info(request, "You have been logged out.")
     return redirect("home")
+
+
+def about(request):
+    """About us page"""
+    return render(request, "core/about.html")
+
+
+def privacy_policy(request):
+    """Privacy policy page"""
+    return render(request, "core/privacy_policy.html")
+
+
+def terms_of_service(request):
+    """Terms of service page"""
+    return render(request, "core/terms_of_service.html")
 
 
 def get_client_ip(request):
