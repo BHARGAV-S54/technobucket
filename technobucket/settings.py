@@ -81,8 +81,13 @@ if db_url:
         "default": dj_database_url.parse(db_url, conn_max_age=600)
     }
 else:
-    # Vercel: write to /tmp which is writable; local: use project root
-    _sqlite_path = Path("/tmp/db.sqlite3") if not DEBUG else BASE_DIR / "db.sqlite3"
+    # On Vercel, the filesystem root is read-only.
+    # We must use /tmp for SQLite if it's the fallback.
+    if os.environ.get("VERCEL") or not DEBUG:
+        _sqlite_path = Path("/tmp/db.sqlite3")
+    else:
+        _sqlite_path = BASE_DIR / "db.sqlite3"
+        
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
