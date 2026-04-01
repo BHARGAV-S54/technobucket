@@ -15,6 +15,14 @@
 </head>
 
 <body class="bg-dark text-light">
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-ring"></div>
+            <img src="{% static 'images/logo.png' %}" alt="Loading..." class="loader-logo">
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary sticky-top">
         <div class="container">
@@ -22,7 +30,7 @@
                 <img src="{% static 'images/logo.png' %}" alt="Techno Bucket" class="logo-img"
                     style="height: 50px; width: auto; margin-right: 10px;">
                 <span class="fw-bold"
-                    style="background: linear-gradient(to right, #22d3ee, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    style="background: linear-gradient(to right, #22d3ee, #3b82f6); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
                     Techno Bucket
                 </span>
             </a>

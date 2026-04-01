@@ -82,6 +82,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Generic utility that triggers once when whole document loads
 window.addEventListener('load', () => {
+    // Hide page loader
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+        loader.classList.add('fade-out');
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 600);
+    }
+
     const offers = document.querySelectorAll('.home-offer-card');
     offers.forEach((card, index) => {
         card.style.transitionDelay = `${index * 120}ms`;
