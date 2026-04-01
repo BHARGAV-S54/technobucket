@@ -120,7 +120,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+if not DEBUG:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+    SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

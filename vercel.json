@@ -16,5 +16,5 @@
       "dest": "technobucket/wsgi.py"
     }
   ],
-  "buildCommand": "python manage.py collectstatic --noinput"
+  "buildCommand": "bash vercel_build.sh"
 }
