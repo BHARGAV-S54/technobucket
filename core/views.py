@@ -631,34 +631,38 @@ def admin_dashboard(request):
     """Admin dashboard view"""
     from orders.models import PortfolioOrder
 
-    portfolio_orders = PortfolioOrder.objects.all().order_by("-created_at")
+    try:
+        portfolio_orders = PortfolioOrder.objects.all().order_by("-created_at")
+        service_submissions = (
+            ContactInquiry.objects.select_related("service")
+            .filter(submission_type__in=["ats_resume", "combo_pack"])
+            .order_by("-created_at")
+        )
+        inquiries = ContactInquiry.objects.filter(submission_type="inquiry").order_by(
+            "-created_at"
+        )
+        portfolio_stats = portfolio_orders.aggregate(
+            total=Count("id"),
+            pending=Count("id", filter=Q(status="pending")),
+            completed=Count("id", filter=Q(status="completed")),
+        )
+    except OperationalError:
+        portfolio_orders = []
+        service_submissions = []
+        inquiries = []
+        portfolio_stats = {"total": 0, "pending": 0, "completed": 0}
 
-    service_submissions = (
-        ContactInquiry.objects.select_related("service")
-        .filter(submission_type__in=["ats_resume", "combo_pack"])
-        .order_by("-created_at")
-    )
-
-    inquiries = ContactInquiry.objects.filter(submission_type="inquiry").order_by(
-        "-created_at"
-    )
-
+    # Ensure we use list() for portfolio_orders to prevent evaluation later if it's a QuerySet
     all_orders = list(portfolio_orders) + list(service_submissions)
-    all_orders.sort(key=lambda x: x.created_at, reverse=True)
-
-    portfolio_stats = portfolio_orders.aggregate(
-        total=Count("id"),
-        pending=Count("id", filter=Q(status="pending")),
-        completed=Count("id", filter=Q(status="completed")),
-    )
+    all_orders.sort(key=lambda x: getattr(x, 'created_at', None), reverse=True)
 
     context = {
         "orders": portfolio_orders,
         "service_submissions": service_submissions,
         "all_orders": all_orders,
         "inquiries": inquiries,
-        "new_inquiries": inquiries.filter(status="new").count(),
-        "total_orders": portfolio_stats["total"] + service_submissions.count(),
+        "new_inquiries": getattr(inquiries, "filter", lambda status: [])("new").count() if hasattr(inquiries, "filter") else 0,
+        "total_orders": portfolio_stats["total"] + (getattr(service_submissions, "count", lambda: 0)()),
         "pending_orders": portfolio_stats["pending"],
         "completed_orders": portfolio_stats["completed"],
     }
