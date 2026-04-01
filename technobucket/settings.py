@@ -80,6 +80,13 @@ if db_url:
     DATABASES = {
         "default": dj_database_url.parse(db_url, conn_max_age=600)
     }
+    # Sanitize options for psycopg2 compatibility if needed
+    _options = DATABASES["default"].get("OPTIONS", {})
+    if isinstance(_options, dict):
+        # Remove Supabase-specific pooling options that psycopg2 rejects
+        _options.pop("supa", None)
+        # Some versions of Vercel integration also add other invalid keys
+        _options.pop("reference", None)
 else:
     # On Vercel, the filesystem root is read-only.
     # We must use /tmp for SQLite if it's the fallback.
