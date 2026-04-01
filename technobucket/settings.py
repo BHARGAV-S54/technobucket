@@ -16,6 +16,12 @@ DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ["*"]  # Safe for production on Vercel with CSRF/auth protection
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.vercel.app",
+    "https://technobucket.vercel.app",
+]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 # Security settings for production
 if not DEBUG:
     SESSION_COOKIE_SECURE = True
