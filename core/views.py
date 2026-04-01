@@ -113,16 +113,16 @@ def services(request):
         combo_pack = {
             "name": "Complete Career Combo Pack",
             "description": "Get everything you need to launch your career! This exclusive combo includes all our premium services at a special discounted price.",
-            "price": 1119,
-            "original_price": 1487,
-            "savings": 368,
+            "price": 7999,
+            "original_price": 8096,
+            "savings": 97,
             "features": [
                 "ATS-Friendly Resume (₹99)",
                 "Portfolio Website (₹1999)",
                 "Professional Profile Creation (₹999)",
                 "FREE Custom Project Consultation (₹4999 value)",
                 "Priority Support",
-                "Save ₹368 (25% off)",
+                "Save ₹97 (Combo Deal)",
             ],
         }
 
