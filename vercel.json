@@ -8,6 +8,10 @@
         "maxLambdaSize": "50mb",
         "pythonVersion": "3.11"
       }
+    },
+    {
+      "src": "static/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -19,6 +23,5 @@
       "src": "/(.*)",
       "dest": "technobucket/wsgi.py"
     }
-  ],
-  "buildCommand": "bash vercel_build.sh"
+  ]
 }
