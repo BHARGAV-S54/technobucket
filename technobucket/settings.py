@@ -71,19 +71,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "technobucket.wsgi.application"
 
-# Use PostgreSQL if env vars are provided, otherwise fall back to SQLite.
-# On Vercel, the filesystem root is read-only, so SQLite DB lives in /tmp.
-_db_host = os.environ.get("DB_HOST", "")
-if _db_host:
+import dj_database_url
+
+# Vercel integration variables often use POSTGRES_URL or DATABASE_URL
+db_url = os.environ.get("POSTGRES_URL") or os.environ.get("DATABASE_URL")
+
+if db_url:
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("DB_NAME", "postgres"),
-            "USER": os.environ.get("DB_USER", "postgres"),
-            "PASSWORD": os.environ.get("DB_PASSWORD", ""),
-            "HOST": _db_host,
-            "PORT": os.environ.get("DB_PORT", "5432"),
-        }
+        "default": dj_database_url.parse(db_url, conn_max_age=600)
     }
 else:
     # Vercel: write to /tmp which is writable; local: use project root
