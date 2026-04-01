@@ -235,6 +235,9 @@ function createElectricBorder(cardElement, options) {
         );
     };
 
+    if (cardElement.classList.contains('eb-initialized')) return;
+    cardElement.classList.add('eb-initialized');
+
     const chaos = opts.chaos;
     const speed = opts.speed;
     const borderRadius = opts.borderRadius;
@@ -245,8 +248,8 @@ function createElectricBorder(cardElement, options) {
     const amplitude = chaos;
     const frequency = 10;
     const baseFlatness = 0;
-    const displacement = 60;
-    const borderOffset = 60;
+    const displacement = 20;
+    const borderOffset = 20;
 
     function updateSize() {
         const rect = cardElement.getBoundingClientRect();
