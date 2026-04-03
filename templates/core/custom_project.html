@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Custom Projects - Nexio Labs{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-6 fw-bold mb-2">Select Your Custom Project</h1>
+            <p class="text-secondary mb-0 mx-auto" style="max-width: 650px;">
+                Pick a project blueprint. On selection, we’ll show the details and tech stack, then you can place an order request.
+            </p>
+        </div>
+
+        <div class="card bg-secondary bg-opacity-10 border-secondary overflow-hidden">
+            <div class="card-body p-0">
+                <div class="custom-project-wrap d-flex flex-column flex-lg-row">
+                    <!-- Left: project list -->
+                    <aside class="custom-project-list p-3 p-lg-4 border-bottom border-lg-end">
+                        <h2 class="h5 mb-3">Project List</h2>
+
+                        <div class="list-group list-group-flush custom-project-list-group" role="tablist">
+                            {% for project in projects %}
+                            <button
+                                type="button"
+                                class="list-group-item list-group-item-action custom-project-tab {% if forloop.first %}active{% endif %}"
+                                data-project-id="{{ project.id }}"
+                                role="tab"
+                                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+                                <div class="d-flex align-items-start justify-content-between gap-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        {% if project.image_url %}
+                                        <div class="rounded-circle overflow-hidden flex-shrink-0" style="width: 32px; height: 32px;">
+                                            <img src="{% static project.image_url %}" alt="" class="w-100 h-100 object-fit-cover">
+                                        </div>
+                                        {% endif %}
+                                        <div>
+                                            <div class="fw-semibold">{{ project.name }}</div>
+                                            <div class="text-secondary small">{{ project.techstack|join:", "|truncatechars:35 }}</div>
+                                        </div>
+                                    </div>
+                                    <i class="bi bi-chevron-right custom-project-tab-icon" aria-hidden="true"></i>
+                                </div>
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </aside>
+
+                    <!-- Right: details -->
+                    <main class="custom-project-details p-3 p-lg-4 position-relative">
+                        {% for project in projects %}
+                        <div
+                            class="custom-project-panel {% if forloop.first %}active{% endif %}"
+                            data-project-panel="{{ project.id }}">
+                            <div class="custom-project-panel-inner">
+                                <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+                                    <h2 class="h4 mb-0">{{ project.name }}</h2>
+                                    <span class="badge rounded-pill custom-project-badge">Blueprint</span>
+                                </div>
+
+                                {% if project.image_url %}
+                                <div class="mb-4 rounded-3 overflow-hidden border border-secondary border-opacity-25" style="max-height: 250px;">
+                                    <img src="{% static project.image_url %}" alt="{{ project.name }} Preview" class="w-100 h-100 object-fit-cover">
+                                </div>
+                                {% endif %}
+
+                                <p class="text-secondary mb-4">{{ project.description }}</p>
+
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <h3 class="h6 mb-0 text-secondary">Tech Stack</h3>
+                                        <span class="small text-secondary">Recommended</span>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        {% for tech in project.techstack %}
+                                        <span class="custom-tech-chip">{{ tech }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                {% if project.demo_url %}
+                                <a href="{{ project.demo_url }}" target="_blank" class="btn btn-outline-info btn-lg w-100 mb-2">
+                                    <i class="bi bi-display me-2"></i> Live Demo Preview
+                                </a>
+                                {% endif %}
+
+                                <a
+                                    class="btn btn-glow btn-lg w-100 custom-order-btn"
+                                    href="{% url 'contact' %}?service={{ custom_service_id }}&message={{ project.order_message|urlencode }}">
+                                    <i class="bi bi-cart-check me-2"></i> Order This Project
+                                </a>
+
+                                <p class="lead text-secondary">Looking for something truly unique? Nexio Labs specializes in building end-to-end custom solutions.</p>
+                                <p class="text-secondary small mt-3 mb-0">
+                                    You’ll be redirected to our Contact form with this blueprint pre-filled.
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    (function () {
+        const tabs = document.querySelectorAll('.custom-project-tab');
+        const panels = document.querySelectorAll('.custom-project-panel');
+
+        function setActive(projectId) {
+            tabs.forEach(t => {
+                const isActive = t.dataset.projectId === projectId;
+                t.classList.toggle('active', isActive);
+                t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+
+            panels.forEach(p => {
+                const isActive = p.dataset.projectPanel === projectId;
+                p.classList.toggle('active', isActive);
+            });
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                setActive(this.dataset.projectId);
+            });
+        });
+    })();
+</script>
+{% endblock %}
+
