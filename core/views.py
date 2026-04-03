@@ -229,9 +229,18 @@ def contact(request):
         return redirect("contact")
 
     try:
-        services_list = Service.objects.filter(is_active=True)
-    except OperationalError:
+        services_list = list(Service.objects.filter(is_active=True))
+    except (OperationalError, Exception):
         services_list = []
+
+    # Provide fallback demo services if database is empty
+    if not services_list:
+        services_list = [
+            {"id": 1, "name": "ATS-Friendly Resume", "price": 99},
+            {"id": 2, "name": "Portfolio Website", "price": 1999},
+            {"id": 3, "name": "Custom Project", "price": 4999},
+            {"id": 4, "name": "Professional Profile Creation", "price": 999},
+        ]
 
     # Prefill support (used by Custom Project "Order" CTA)
     selected_service_id = request.GET.get("service", "") or ""
@@ -247,10 +256,11 @@ def contact(request):
 def custom_project(request):
     """Custom Project selection page (2-pane UI)"""
     # Link the Order button to the Contact form.
-    custom_service = Service.objects.filter(
-        slug="custom-project", is_active=True
-    ).first()
-    custom_service_id = custom_service.id if custom_service else ""
+    try:
+        custom_service = Service.objects.filter(slug="custom-project", is_active=True).first()
+        custom_service_id = custom_service.id if custom_service else 3  # Fallback to ID 3 from demo services
+    except (OperationalError, Exception):
+        custom_service_id = 3
 
     projects = [
         {

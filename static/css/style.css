@@ -683,6 +683,12 @@ a:hover i {
     box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25) !important;
 }
 
+/* Fix for select options visibility on dark theme */
+.form-select option {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+}
+
 /* Navbar */
 .navbar {
     backdrop-filter: blur(10px);
