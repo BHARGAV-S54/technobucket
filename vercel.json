@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "technobucket/wsgi.py",
+      "src": "nexiolabs/wsgi.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "50mb",
@@ -21,7 +21,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "technobucket/wsgi.py"
+      "dest": "nexiolabs/wsgi.py"
     }
   ]
 }

@@ -1,5 +1,5 @@
 """
-URL configuration for technobucket project.
+URL configuration for nexiolabs project.
 """
 
 from django.contrib import admin

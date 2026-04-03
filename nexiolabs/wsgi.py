@@ -1,7 +1,7 @@
 import os
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "technobucket.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nexiolabs.settings")
 
 # Run migrations on cold start so /tmp/db.sqlite3 is always up to date.
 # This is safe to call repeatedly (it's a no-op when nothing has changed).
