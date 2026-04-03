@@ -1347,7 +1347,7 @@ html {
 }
 
 .loader-logo {
-    width: 65px;
+    width: 100px;
     height: auto;
     z-index: 1;
     filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.3));
