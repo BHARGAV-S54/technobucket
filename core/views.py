@@ -269,7 +269,7 @@ def custom_project(request):
             "description": "An intelligent travel AI that plans the travel plans—crafting personalized itineraries, suggesting destinations, and optimizing every step of your journey.",
             "techstack": ["Python", "Next.js", "OpenAI API", "Google Maps"],
             "demo_url": "https://explore-with-ai-custom-itinera-git-5dddbf-bhargav-s54s-projects.vercel.app/",
-            "image_url": "/static/images/projects/travelguide.png",
+            "image_url": "images/projects/travelguide.png",
         },
         {
             "id": "fakedetector",
@@ -277,7 +277,7 @@ def custom_project(request):
             "description": "Real-time AI analysis engine that scans URLs for phishing risks by analyzing SSL status, behavioral patterns, and cross-referencing known threat databases.",
             "techstack": ["Python", "AI/ML Heuristics", "React", "Cyber-security API"],
             "demo_url": "https://hack-five-self.vercel.app/dashboard",
-            "image_url": "/static/images/projects/fakedetector.png",
+            "image_url": "images/projects/fakedetector.png",
         },
         {
             "id": "automation",

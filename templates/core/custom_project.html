@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Custom Projects - Techno Bucket{% endblock %}
 
@@ -31,7 +32,7 @@
                                     <div class="d-flex align-items-center gap-3">
                                         {% if project.image_url %}
                                         <div class="rounded-circle overflow-hidden flex-shrink-0" style="width: 32px; height: 32px;">
-                                            <img src="{{ project.image_url }}" alt="" class="w-100 h-100 object-fit-cover">
+                                            <img src="{% static project.image_url %}" alt="" class="w-100 h-100 object-fit-cover">
                                         </div>
                                         {% endif %}
                                         <div>
@@ -60,7 +61,7 @@
 
                                 {% if project.image_url %}
                                 <div class="mb-4 rounded-3 overflow-hidden border border-secondary border-opacity-25" style="max-height: 250px;">
-                                    <img src="{{ project.image_url }}" alt="{{ project.name }} Preview" class="w-100 h-100 object-fit-cover">
+                                    <img src="{% static project.image_url %}" alt="{{ project.name }} Preview" class="w-100 h-100 object-fit-cover">
                                 </div>
                                 {% endif %}
 
