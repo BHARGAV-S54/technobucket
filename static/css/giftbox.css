@@ -195,10 +195,10 @@
 }
 
 .combo-pack-card .card-body.p-4.p-lg-5.mt-4 {
-    background: rgba(11, 18, 32, 0.94);
+    background: rgba(11, 18, 32, 0.98);
     border-radius: 1rem;
     border: 1px solid rgba(148, 163, 184, 0.24);
-    backdrop-filter: blur(4px);
+    /* backdrop-filter removed for performance */
 }
 
 .combo-pack-card {

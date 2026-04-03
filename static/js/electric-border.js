@@ -268,7 +268,12 @@ function createElectricBorder(cardElement, options) {
 
     let size = updateSize();
 
+    let isVisible = false;
+    let animationFrameId = null;
+
     function draw(currentTime) {
+        if (!isVisible) return;
+
         const deltaTime = (currentTime - lastFrameTime) / 1000;
         time += deltaTime * speed;
         lastFrameTime = currentTime;
@@ -344,7 +349,7 @@ function createElectricBorder(cardElement, options) {
         ctx.closePath();
         ctx.stroke();
 
-        requestAnimationFrame(draw);
+        animationFrameId = requestAnimationFrame(draw);
     }
 
     const resizeObserver = new ResizeObserver(function () {
@@ -352,6 +357,18 @@ function createElectricBorder(cardElement, options) {
     });
     resizeObserver.observe(cardElement);
 
-    requestAnimationFrame(draw);
+    const intersectionObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            isVisible = entry.isIntersecting;
+            if (isVisible) {
+                lastFrameTime = performance.now();
+                animationFrameId = requestAnimationFrame(draw);
+            } else if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+        });
+    }, { threshold: 0.01 });
+    intersectionObserver.observe(wrapper);
 }
 

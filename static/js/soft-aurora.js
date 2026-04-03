@@ -150,7 +150,8 @@
 
     function resize() {
       const rect = container.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const isMobile = window.innerWidth <= 768;
+      const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
     }
@@ -159,7 +160,10 @@
 
     const startTime = performance.now();
     let raf;
+    let isVisible = false;
+
     function render() {
+      if (!isVisible) return;
       raf = requestAnimationFrame(render);
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.clearColor(0, 0, 0, 0);
@@ -168,10 +172,23 @@
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
-    render();
+
+    const intersectionObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            isVisible = entry.isIntersecting;
+            if (isVisible) {
+                raf = requestAnimationFrame(render);
+            } else if (raf) {
+                cancelAnimationFrame(raf);
+                raf = null;
+            }
+        });
+    }, { threshold: 0.01 });
+    intersectionObserver.observe(container);
 
     return function destroy() {
       cancelAnimationFrame(raf);
+      intersectionObserver.disconnect();
       window.removeEventListener('resize', resize);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
       if (container.contains(canvas)) container.removeChild(canvas);
