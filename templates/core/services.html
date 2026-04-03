@@ -3,10 +3,6 @@
 
 {% block title %}Services - Nexio Labs{% endblock %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/giftbox.css' %}">
-{% endblock %}
-
 {% block content %}
 <div class="container py-5">
     <div class="text-center mb-5">
@@ -16,81 +12,9 @@
         </p>
     </div>
 
-    <!-- Combo Pack Section -->
-    {% if combo_pack %}
-    <div class="combo-pack-section">
-        <!-- Gift Box -->
-        <div id="giftWrapper" class="gift-animation-wrapper">
-            <div id="giftBox" class="gift-box">
-                <span class="gift-emoji">🎁</span>
-                <div class="gift-hint">Click to Open Your Special Offer!</div>
-                <div id="confettiContainer" class="confetti-container"></div>
-            </div>
-        </div>
-
-        <!-- Ballpit Background (centered behind card) -->
-        <div id="ballPitBg" class="ballpit-background">
-            <canvas id="ballpit-canvas"></canvas>
-        </div>
-
-        <!-- Combo Pack Card (hidden until opened) -->
-        <div id="comboPackCard" class="combo-pack-card-wrapper">
-            <div class="card combo-pack-card mb-5 position-relative overflow-hidden shadow-lg border-warning">
-                <div class="position-absolute top-0 end-0 p-4">
-                    <i class="bi bi-stars text-warning fs-1"></i>
-                </div>
-
-                <div class="position-absolute top-0 start-50 translate-middle-x">
-                    <span class="badge rounded-bottom px-4 py-2">BEST VALUE OFFER</span>
-                </div>
-
-                <div class="card-body p-4 p-lg-5 mt-4">
-                    <div class="row align-items-center">
-                        <div class="col-lg-8">
-                            <div class="d-flex align-items-start gap-4">
-                                <div class="p-3 rounded combo-pack-icon">
-                                    <i class="bi bi-gift text-warning fs-1"></i>
-                                </div>
-                                <div>
-                                    <h2 class="h1 mb-2">{{ combo_pack.name }}</h2>
-                                    <p class="text-secondary mb-0">{{ combo_pack.description }}</p>
-                                </div>
-                            </div>
-
-                            <div class="row g-3 mt-4">
-                                {% for feature in combo_pack.features %}
-                                <div class="col-sm-6 col-lg-4">
-                                    <div class="d-flex align-items-start gap-2">
-                                        <i class="bi bi-check-lg text-success mt-1"></i>
-                                        <span class="small">{{ feature }}</span>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
-                            <div class="d-flex align-items-center justify-content-lg-end gap-3 mb-3">
-                                <span class="display-4 fw-bold">₹{{ combo_pack.price|floatformat:0 }}</span>
-                                <div class="text-start">
-                                    <span class="text-warning small text-nowrap">Save ₹{{ combo_pack.savings }}</span>
-                                </div>
-                            </div>
-                            <a href="{% url 'combo_pack_form' %}" class="btn btn-lg btn-glow w-100"
-                                style="background: linear-gradient(135deg, #f59e0b, #ea580c); border: none;">
-                                Get Combo Pack
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
     <!-- Individual Services -->
     <h2 class="h3 mb-4 text-secondary">Individual Services</h2>
-    <div class="row g-4">
+    <div class="row g-4 mb-5">
         {% for service in services %}
         <div class="col-md-6">
             <div
@@ -149,18 +73,61 @@
         </div>
         {% endfor %}
     </div>
-</div>
-{% endblock %}
 
-{% block extra_js %}
-<script src="{% static 'js/giftbox.js' %}"></script>
-<script type="importmap">
-    {
-        "imports": {
-            "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js",
-            "three/examples/jsm/environments/RoomEnvironment.js": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js"
-        }
-    }
-</script>
-<script type="module" src="{% static 'js/ballpit.js' %}"></script>
+    <!-- Combo Pack Section at Bottom -->
+    {% if combo_pack %}
+    <div class="mt-5">
+        <h2 class="h3 mb-4 text-secondary">Special Offers</h2>
+        <div class="card combo-pack-card position-relative overflow-hidden shadow-lg border-warning">
+            <div class="position-absolute top-0 end-0 p-4">
+                <i class="bi bi-stars text-warning fs-1"></i>
+            </div>
+
+            <div class="position-absolute top-0 start-50 translate-middle-x">
+                <span class="badge rounded-bottom px-4 py-2">BEST VALUE OFFER</span>
+            </div>
+
+            <div class="card-body p-4 p-lg-5 mt-4">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <div class="d-flex align-items-start gap-4">
+                            <div class="p-3 rounded combo-pack-icon">
+                                <i class="bi bi-gift text-warning fs-1"></i>
+                            </div>
+                            <div>
+                                <h2 class="h1 mb-2">{{ combo_pack.name }}</h2>
+                                <p class="text-secondary mb-0">{{ combo_pack.description }}</p>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-4">
+                            {% for feature in combo_pack.features %}
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="d-flex align-items-start gap-2">
+                                    <i class="bi bi-check-lg text-success mt-1"></i>
+                                    <span class="small">{{ feature }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                        <div class="d-flex align-items-center justify-content-lg-end gap-3 mb-3">
+                            <span class="display-4 fw-bold">₹{{ combo_pack.price|floatformat:0 }}</span>
+                            <div class="text-start">
+                                <span class="text-warning small text-nowrap">Save ₹{{ combo_pack.savings }}</span>
+                            </div>
+                        </div>
+                        <a href="{% url 'combo_pack_form' %}" class="btn btn-lg btn-glow w-100"
+                            style="background: linear-gradient(135deg, #f59e0b, #ea580c); border: none;">
+                            Get Combo Pack
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
