@@ -272,10 +272,12 @@ def custom_project(request):
             "image_url": "/static/images/projects/travelguide.png",
         },
         {
-            "id": "ecommerce",
-            "name": "E-commerce Platform",
-            "description": "A fast, modern e-commerce platform with product management, cart/checkout flows, and performance-optimized UI.",
-            "techstack": ["Django", "Next.js", "PostgreSQL", "Stripe-ready design"],
+            "id": "fakedetector",
+            "name": "Risk Analyzer - Phishing Detection",
+            "description": "Real-time AI analysis engine that scans URLs for phishing risks by analyzing SSL status, behavioral patterns, and cross-referencing known threat databases.",
+            "techstack": ["Python", "AI/ML Heuristics", "React", "Cyber-security API"],
+            "demo_url": "https://hack-five-self.vercel.app/dashboard",
+            "image_url": "/static/images/projects/fakedetector.png",
         },
         {
             "id": "automation",
