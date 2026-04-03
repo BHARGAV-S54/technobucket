@@ -1,4 +1,4 @@
-// Main JavaScript for Techno Bucket
+// Main JavaScript for Nexio Labs
 
 document.addEventListener('DOMContentLoaded', function() {
     // Auto-hide alerts after 5 seconds

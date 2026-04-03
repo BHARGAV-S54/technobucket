@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Services - Techno Bucket{% endblock %}
+{% block title %}Services - Nexio Labs{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/giftbox.css' %}">
@@ -133,7 +133,7 @@
                     <div class="d-grid gap-2">
                         {% if service.slug == 'portfolio-website' %}
                         <a href="{% url 'portfolio_order' %}" class="btn btn-glow btn-lg">Get Started</a>
-                        <a href="https://demo-portfolio-technobucket.vercel.app" target="_blank"
+                        <a href="https://demo-portfolio-nexio-labs.vercel.app" target="_blank"
                             class="btn btn-outline-secondary"> <i class="bi bi-box-arrow-up-right me-1"></i> View
                             Demo</a>
                         {% elif service.slug == 'ats-resume' %}
