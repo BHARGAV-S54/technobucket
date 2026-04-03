@@ -28,9 +28,16 @@
                                 role="tab"
                                 aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
                                 <div class="d-flex align-items-start justify-content-between gap-3">
-                                    <div>
-                                        <div class="fw-semibold">{{ project.name }}</div>
-                                        <div class="text-secondary small">{{ project.techstack|join:", "|truncatechars:35 }}</div>
+                                    <div class="d-flex align-items-center gap-3">
+                                        {% if project.image_url %}
+                                        <div class="rounded-circle overflow-hidden flex-shrink-0" style="width: 32px; height: 32px;">
+                                            <img src="{{ project.image_url }}" alt="" class="w-100 h-100 object-fit-cover">
+                                        </div>
+                                        {% endif %}
+                                        <div>
+                                            <div class="fw-semibold">{{ project.name }}</div>
+                                            <div class="text-secondary small">{{ project.techstack|join:", "|truncatechars:35 }}</div>
+                                        </div>
                                     </div>
                                     <i class="bi bi-chevron-right custom-project-tab-icon" aria-hidden="true"></i>
                                 </div>
@@ -51,6 +58,12 @@
                                     <span class="badge rounded-pill custom-project-badge">Blueprint</span>
                                 </div>
 
+                                {% if project.image_url %}
+                                <div class="mb-4 rounded-3 overflow-hidden border border-secondary border-opacity-25" style="max-height: 250px;">
+                                    <img src="{{ project.image_url }}" alt="{{ project.name }} Preview" class="w-100 h-100 object-fit-cover shadow">
+                                </div>
+                                {% endif %}
+
                                 <p class="text-secondary mb-4">{{ project.description }}</p>
 
                                 <div class="mb-4">
@@ -64,6 +77,12 @@
                                         {% endfor %}
                                     </div>
                                 </div>
+
+                                {% if project.demo_url %}
+                                <a href="{{ project.demo_url }}" target="_blank" class="btn btn-outline-info btn-lg w-100 mb-2">
+                                    <i class="bi bi-display me-2"></i> Live Demo Preview
+                                </a>
+                                {% endif %}
 
                                 <a
                                     class="btn btn-glow btn-lg w-100 custom-order-btn"

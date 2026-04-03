@@ -254,10 +254,12 @@ def custom_project(request):
 
     projects = [
         {
-            "id": "saas",
-            "name": "SaaS Dashboard",
-            "description": "A scalable multi-tenant SaaS dashboard with authentication, billing-ready architecture, role-based access, and analytics.",
-            "techstack": ["Django", "React", "PostgreSQL", "JWT/SSO"],
+            "id": "travelguide",
+            "name": "TravelGuide AI",
+            "description": "An intelligent travel AI that plans the travel plans—crafting personalized itineraries, suggesting destinations, and optimizing every step of your journey.",
+            "techstack": ["Python", "Next.js", "OpenAI API", "Google Maps"],
+            "demo_url": "https://explore-with-ai-custom-itinera-git-5dddbf-bhargav-s54s-projects.vercel.app/",
+            "image_url": "/static/images/projects/travelguide.png",
         },
         {
             "id": "ecommerce",
