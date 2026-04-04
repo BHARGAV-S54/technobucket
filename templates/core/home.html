@@ -129,32 +129,6 @@
         </div>
     </section>
 
-    <!-- Testimonials -->
-    <section class="py-5 pixel-snow-bg">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="h1 mb-3">What Our Clients Say</h2>
-                <p class="text-secondary">Success stories from professionals like you</p>
-            </div>
-
-            <div class="row g-4">
-                {% for testimonial in testimonials %}
-                <div class="col-md-4">
-                    <div class="card bg-secondary bg-opacity-10 border-secondary h-100 js-electric-border">
-                        <div class="card-body p-4">
-                            <p class="fst-italic text-secondary mb-4">"{{ testimonial.content }}"</p>
-                            <div>
-                                <p class="fw-semibold mb-1">{{ testimonial.customer_name }}</p>
-                                <p class="text-secondary small">{{ testimonial.role }}{% if testimonial.company %} at {{
-                                    testimonial.company }}{% endif %}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
 
     <!-- CTA Section -->
     <section class="py-5 pixel-snow-bg">

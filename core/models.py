@@ -31,22 +31,6 @@ class Service(models.Model):
         return 0
 
 
-class Testimonial(models.Model):
-    customer_name = models.CharField(max_length=255)
-    role = models.CharField(max_length=255, blank=True)
-    company = models.CharField(max_length=255, blank=True)
-    content = models.TextField()
-    rating = models.IntegerField(default=5)
-    is_featured = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    sort_order = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ["-is_featured", "sort_order"]
-
-    def __str__(self):
-        return f"{self.customer_name} - {self.company}"
 
 
 class ContactInquiry(models.Model):

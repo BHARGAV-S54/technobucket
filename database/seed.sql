@@ -135,6 +135,4 @@ SELECT 'Contact Inquiries', COUNT(*) FROM contact_inquiries
 UNION ALL
 SELECT 'Order Notes', COUNT(*) FROM order_notes
 UNION ALL
-SELECT 'Services', COUNT(*) FROM services
-UNION ALL
-SELECT 'Testimonials', COUNT(*) FROM testimonials;
+SELECT 'Services', COUNT(*) FROM services;

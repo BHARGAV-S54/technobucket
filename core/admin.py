@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, Testimonial, ContactInquiry
+from .models import Service, ContactInquiry
 
 
 @admin.register(Service)
@@ -10,11 +10,6 @@ class ServiceAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
-@admin.register(Testimonial)
-class TestimonialAdmin(admin.ModelAdmin):
-    list_display = ['customer_name', 'role', 'company', 'is_featured', 'is_active']
-    list_filter = ['is_featured', 'is_active']
-    search_fields = ['customer_name', 'company', 'content']
 
 
 @admin.register(ContactInquiry)

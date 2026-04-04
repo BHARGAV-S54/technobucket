@@ -175,27 +175,7 @@ CREATE TABLE activity_logs (
     INDEX idx_performed_at (performed_at)
 );
 
--- ============================================
--- TESTIMONIALS TABLE
--- ============================================
-CREATE TABLE testimonials (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    customer_name VARCHAR(255) NOT NULL,
-    role VARCHAR(255),
-    company VARCHAR(255),
-    content TEXT NOT NULL,
-    rating INT DEFAULT 5,
-    is_featured BOOLEAN DEFAULT FALSE,
-    is_active BOOLEAN DEFAULT TRUE,
-    sort_order INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
--- Insert sample testimonials
-INSERT INTO testimonials (customer_name, role, company, content, is_featured) VALUES
-('Rahul Sharma', 'Software Engineer', 'Google', 'Techno Bucket helped me create a stunning portfolio that got me noticed by top companies.', TRUE),
-('Priya Patel', 'Product Manager', 'Microsoft', 'The ATS-friendly resume was a game changer. I started getting interview calls immediately!', TRUE),
-('Amit Kumar', 'Data Scientist', 'Amazon', 'Best investment for my career. The combo pack gave me everything I needed.', TRUE);
 
 -- ============================================
 -- VIEWS FOR COMMON QUERIES

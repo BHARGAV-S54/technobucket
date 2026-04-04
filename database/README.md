@@ -57,8 +57,6 @@ Internal notes for admins on orders.
 #### 7. `activity_logs`
 Audit trail for all changes.
 
-#### 8. `testimonials`
-Customer testimonials displayed on the site.
 
 ## Setup Instructions
 

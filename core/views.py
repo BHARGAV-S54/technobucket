@@ -3,7 +3,7 @@ import os
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Service, Testimonial, ContactInquiry
+from .models import Service, ContactInquiry
 from django.utils.html import format_html
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
@@ -26,17 +26,12 @@ from .pdf_generator import (
 def home(request):
     """Home page view"""
     services = []
-    testimonials = []
 
     try:
         services = list(Service.objects.filter(is_active=True, is_combo=False)[:4])
-        testimonials = list(
-            Testimonial.objects.filter(is_active=True, is_featured=True)[:3]
-        )
     except OperationalError:
         # Database not ready (e.g., migrations not applied in deployment). Use in-memory fallback content.
         services = []
-        testimonials = []
 
     # Provide a fallback set of demo content when the database is empty.
     if not services:
@@ -67,31 +62,9 @@ def home(request):
             },
         ]
 
-    if not testimonials:
-        testimonials = [
-            {
-                "customer_name": "Rahul Sharma",
-                "role": "Software Engineer",
-                "company": "Google",
-                "content": "Nexio Labs helped me create a stunning portfolio that got me noticed by top companies.",
-            },
-            {
-                "customer_name": "Priya Patel",
-                "role": "Product Manager",
-                "company": "Microsoft",
-                "content": "The ATS-friendly resume was a game changer. I started getting interview calls immediately!",
-            },
-            {
-                "customer_name": "Amit Kumar",
-                "role": "Data Scientist",
-                "company": "Amazon",
-                "content": "Best investment for my career. The combo pack gave me everything I needed.",
-            },
-        ]
 
     context = {
         "services": services,
-        "testimonials": testimonials,
     }
     return render(request, "core/home.html", context)
 
