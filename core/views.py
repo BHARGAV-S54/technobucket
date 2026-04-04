@@ -249,7 +249,7 @@ def custom_project(request):
             "name": "Risk Analyzer - Phishing Detection",
             "description": "Real-time AI analysis engine that scans URLs for phishing risks by analyzing SSL status, behavioral patterns, and cross-referencing known threat databases.",
             "techstack": ["Python", "AI/ML Heuristics", "React", "Cyber-security API"],
-            "demo_url": "https://hack-five-self.vercel.app/dashboard",
+            "demo_url": "https://hack-five-self.vercel.app/",
             "image_url": "images/projects/fakedetector.png",
         },
         {
