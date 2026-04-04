@@ -253,10 +253,13 @@ def custom_project(request):
             "image_url": "images/projects/fakedetector.png",
         },
         {
-            "id": "automation",
-            "name": "Automation & Integrations",
-            "description": "Integrate tools and build workflows: webhooks, background jobs, dashboards, and secure integrations for teams.",
-            "techstack": ["Python", "Celery", "PostgreSQL", "REST/Webhooks"],
+            "id": "codebattle",
+            "name": "CODE Battle - Proctoring & AI Evaluation",
+            "description": "Overview\n\nCODE Battle is a high-stakes competitive programming platform designed for secure, real-time assessments. It features advanced proctoring capabilities like live tab-tracking and environment locking, combined with Gemini-powered automated code evaluation for fair and accurate performance analysis.\n\nKey Features:\n• Real-time Proctoring & Tab Monitoring\n• AI-Powered Solution Evaluation (Gemini)\n• Scalable Multi-player Coding Environment\n• Production-ready for Render & Heroku",
+            "techstack": ["Node.js", "Socket.io", "PostgreSQL", "Gemini AI", "Express"],
+            "demo_url": "https://codebattle-tau.vercel.app/",
+            "image_url": "images/projects/codebattle.png",
+            "is_blueprint": True,
         },
         {
             "id": "mobile",

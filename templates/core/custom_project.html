@@ -56,7 +56,9 @@
                             <div class="custom-project-panel-inner">
                                 <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
                                     <h2 class="h4 mb-0">{{ project.name }}</h2>
+                                    {% if project.is_blueprint|default:True %}
                                     <span class="badge rounded-pill custom-project-badge">Blueprint</span>
+                                    {% endif %}
                                 </div>
 
                                 {% if project.image_url %}
@@ -65,8 +67,15 @@
                                 </div>
                                 {% endif %}
 
-                                <p class="text-secondary mb-4">{{ project.description }}</p>
+                                <p class="text-secondary mb-4">{{ project.description|linebreaksbr }}</p>
 
+                                {% if not project.is_blueprint and project.demo_url %}
+                                <p class="mb-4">
+                                    <a href="{{ project.demo_url }}" target="_blank" class="text-info">{{ project.demo_url }}</a>
+                                </p>
+                                {% endif %}
+
+                                {% if project.techstack %}
                                 <div class="mb-4">
                                     <div class="d-flex align-items-center justify-content-between mb-2">
                                         <h3 class="h6 mb-0 text-secondary">Tech Stack</h3>
@@ -78,23 +87,28 @@
                                         {% endfor %}
                                     </div>
                                 </div>
+                                {% endif %}
 
-                                {% if project.demo_url %}
+                                {% if project.is_blueprint|default:True and project.demo_url %}
                                 <a href="{{ project.demo_url }}" target="_blank" class="btn btn-outline-info btn-lg w-100 mb-2">
                                     <i class="bi bi-display me-2"></i> Live Demo Preview
                                 </a>
                                 {% endif %}
 
+                                {% if project.is_blueprint|default:True %}
                                 <a
                                     class="btn btn-glow btn-lg w-100 custom-order-btn"
                                     href="{% url 'contact' %}?service={{ custom_service_id }}&message={{ project.order_message|urlencode }}">
                                     <i class="bi bi-cart-check me-2"></i> Order This Project
                                 </a>
+                                {% endif %}
 
+                                {% if project.is_blueprint|default:True %}
                                 <p class="lead text-secondary">Looking for something truly unique? Nexio Labs specializes in building end-to-end custom solutions.</p>
                                 <p class="text-secondary small mt-3 mb-0">
                                     You’ll be redirected to our Contact form with this blueprint pre-filled.
                                 </p>
+                                {% endif %}
                             </div>
                         </div>
                         {% endfor %}
