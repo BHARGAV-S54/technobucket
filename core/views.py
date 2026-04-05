@@ -262,10 +262,13 @@ def custom_project(request):
             "is_blueprint": True,
         },
         {
-            "id": "mobile",
-            "name": "Web App + Mobile-ready UI",
-            "description": "A responsive web app UI that is mobile-ready, with polished UX and maintainable component architecture.",
-            "techstack": ["Django", "React", "TypeScript", "REST API"],
+            "id": "agrimind",
+            "name": "AGRIMIND FLEET COMMAND",
+            "description": "PROJECT CONCEPT: Multi-drone fleet management for precision agriculture\n\nPROBLEM STATEMENT:\n• Manual pesticide use\n• Disease detection delays\n• Pest control challenges\n• Resource optimization\n\nSOLUTION:\n• Autonomous fleet\n• Precision spraying\n• Real-time detection\n• Smart battery management",
+            "techstack": ["Three.js", "Express.js", "Node.js"],
+            "demo_url": "https://simulation1-eight.vercel.app/",
+            "image_url": "images/projects/agrimind.png",
+            "is_blueprint": True,
         },
     ]
 
