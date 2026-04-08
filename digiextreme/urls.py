@@ -1,5 +1,5 @@
 """
-URL configuration for nexiolabs project.
+URL configuration for digiextreme project.
 """
 
 from django.contrib import admin

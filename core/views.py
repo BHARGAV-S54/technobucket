@@ -570,7 +570,7 @@ def payment_confirm(request):
         f"Thanks for your payment for {service_name}. Your payment ID is {payment_id}.\n"
         f"We've attached your invoice.\n\n"
         "If you have any questions, just reply to this email.\n\n"
-        "— Nexio Labs Team"
+        "— digiextreme Team"
     )
     try:
         email = EmailMessage(subject=subject, body=body, to=[customer_email])
@@ -590,7 +590,7 @@ def admin_login(request):
         password = request.POST.get("password")
 
         # Hardcoded credentials as requested
-        if username == "nexiolabs" and password == "bhargav":
+        if username == "digiextreme" and password == "bhargav":
             # Create or get admin user
             from django.contrib.auth.models import User
 
@@ -598,7 +598,7 @@ def admin_login(request):
                 user = User.objects.get(username="admin")
             except User.DoesNotExist:
                 user = User.objects.create_superuser(
-                    "admin", "admin@nexiolabs.com", "bhargav"
+                    "admin", "admin@digiextreme.com", "bhargav"
                 )
 
             user = authenticate(request, username="admin", password=password)

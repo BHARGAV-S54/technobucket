@@ -3,7 +3,7 @@ import sys
 
 base_dir = r"c:\Users\sanab\Downloads\Techno"
 sys.path.append(base_dir)
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nexiolabs.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "digiextreme.settings")
 
 import django
 django.setup()

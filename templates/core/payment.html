@@ -1,6 +1,6 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}Payment - Nexio Labs{% endblock %}
+{% block title %}Payment - digiextreme{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -85,7 +85,7 @@
             key: order.razorpay_key,
             amount: order.amount,
             currency: order.currency,
-            name: "{{ selected_service.name|default:'Nexio Labs' }}",
+            name: "{{ selected_service.name|default:'digiextreme' }}",
             description: "{{ selected_service.name|default:'Service' }} Payment",
             order_id: order.order_id,
             theme: { color: "#0ea5e9" },

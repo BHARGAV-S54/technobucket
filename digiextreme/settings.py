@@ -1,5 +1,5 @@
 """
-Django settings for nexiolabs project.
+Django settings for digiextreme project.
 """
 
 import os
@@ -18,7 +18,7 @@ ALLOWED_HOSTS = ["*"]  # Safe for production on Vercel with CSRF/auth protection
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.vercel.app",
-    "https://nexiolabs.vercel.app",
+    "https://digiextreme.vercel.app",
 ]
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
@@ -51,7 +51,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "nexiolabs.urls"
+ROOT_URLCONF = "digiextreme.urls"
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "nexiolabs.wsgi.application"
+WSGI_APPLICATION = "digiextreme.wsgi.application"
 
 import dj_database_url
 

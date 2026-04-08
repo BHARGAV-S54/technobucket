@@ -1,4 +1,4 @@
-// Main JavaScript for Nexio Labs
+// Main JavaScript for digiextreme
 
 document.addEventListener('DOMContentLoaded', function() {
     // Auto-hide alerts after 5 seconds

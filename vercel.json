@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "nexiolabs/wsgi.py",
+      "src": "digiextreme/wsgi.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "50mb",
@@ -21,7 +21,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "nexiolabs/wsgi.py"
+      "dest": "digiextreme/wsgi.py"
     }
   ]
 }
