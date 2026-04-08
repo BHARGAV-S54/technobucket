@@ -1026,14 +1026,42 @@ html {
     transform-origin: center;
 }
 
-.navbar-brand span.text-gradient-shimmer {
-    animation: text-gradient 6s ease-in-out infinite;
-    background-size: 200% 100%;
-}
-
 @keyframes logo-rotate-pulse {
     0%, 100% { transform: rotate(0deg) scale(1); }
     50% { transform: rotate(2deg) scale(1.03); }
+}
+
+.navbar-brand span.text-gradient-shimmer {
+    font-size: inherit;
+    letter-spacing: 0.01em;
+}
+
+/* "digi" — silver/chrome color */
+.brand-digi {
+    color: #c0c0c0;
+    text-shadow: 0 0 8px rgba(192, 192, 192, 0.4);
+    -webkit-text-fill-color: #c0c0c0;
+    transition: color 0.3s ease;
+}
+
+/* "extreme" — vivid blue color */
+.brand-extreme {
+    color: #3b82f6;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    -webkit-text-fill-color: #3b82f6;
+    transition: color 0.3s ease;
+}
+
+.navbar-brand:hover .brand-digi {
+    color: #e8e8e8;
+    text-shadow: 0 0 14px rgba(220, 220, 220, 0.7);
+    -webkit-text-fill-color: #e8e8e8;
+}
+
+.navbar-brand:hover .brand-extreme {
+    color: #60a5fa;
+    text-shadow: 0 0 14px rgba(96, 165, 250, 0.7);
+    -webkit-text-fill-color: #60a5fa;
 }
 
 @keyframes text-gradient {
